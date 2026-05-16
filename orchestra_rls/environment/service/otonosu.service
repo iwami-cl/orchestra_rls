@@ -1,16 +1,18 @@
 [Unit]
-Description = uWSGI for otonosu
-After = syslog.target
+Description=uWSGI service for otonosu
+After=network.target
 
 [Service]
-ExecStartPre=-/bin/mkdir -p /var/log/uwsgi
-ExecStartPre=-/bin/mkdir -p /var/run/uwsgi
-ExecStart = /usr/bin/uwsgi --ini /usr/local/dialog_pf/otonosu/orchestra_rls/environment/service/uwsgi.ini
+User=root
+Group=root
+
+# pyenv の仮想環境を systemd に認識させる
+Environment="PATH=/usr/local/pyenv/versions/3.13.7/envs/otonosu-venv/bin:/usr/local/pyenv/bin:/usr/bin:/bin"
+
+# uWSGI の起動コマンド
+ExecStart=/usr/local/bin/uwsgi --ini /etc/uwsgi/uwsgi.ini
+
 Restart=always
-KillSignal=SIGQUIT
-Type=notify
-StandardError=syslog
-NotifyAccess=all
 
 [Install]
 WantedBy=multi-user.target
