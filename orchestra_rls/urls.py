@@ -21,11 +21,11 @@ from user.views import IndexView, TenantUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include("user.urls")),
-    path('home/', IndexView.as_view(), name="index"),
-    path('music/', include("music.urls")),
-    path('schedule/', include("schedule.urls")),
-    path('api/schedule/', include("schedule.api.urls")),
-    path('tenant/<uuid:pk>/', TenantUpdateView.as_view(), name='tenant_update'),  # 追加
-    path('instrument/', include("instrument.urls")),  # 追加
+    path('otonosu/user/', include("user.urls")),
+    path('otonosu/home/', IndexView.as_view(), name="index"),
+    path('otonosu/music/', include("music.urls")),
+    path('otonosu/schedule/', include("schedule.urls")),
+    path('otonosu/api/schedule/', include("schedule.api.urls")),
+    path('otonosu/tenant/<uuid:pk>/', TenantUpdateView.as_view(), name='tenant_update'),  # 追加
+    path('otonosu/instrument/', include("instrument.urls")),  # 追加
 ]
