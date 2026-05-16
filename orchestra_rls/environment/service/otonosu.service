@@ -1,0 +1,16 @@
+[Unit]
+Description = uWSGI for otonosu
+After = syslog.target
+
+[Service]
+ExecStartPre=-/bin/mkdir -p /var/log/uwsgi
+ExecStartPre=-/bin/mkdir -p /var/run/uwsgi
+ExecStart = /usr/bin/uwsgi --ini /usr/local/dialog_pf/otonosu/orchestra_rls/environment/service/uwsgi.ini
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target

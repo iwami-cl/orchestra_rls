@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/common/table.css' %}">
+<link rel="stylesheet" href="{% static 'css/instrument/instrument_part_list.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 id="header">パート一覧</h1>
+        <a href="{% url 'instrument:instrument_part_create' %}" class="btn add-btn" title="パートを追加">
+            <span class="fa fa-plus"></span>
+        </a>
+    </div>
+    <div>
+        {% for part in object_list %}
+        <div class="col-12 text-start part-item">
+            <div class="row">
+                <span class="username text-start"><a href="{% url 'instrument:instrument_part_detail' pk=part.id %}" role="button">{{ part.part_name }}</a></span>
+            </div>
+            <div class="row">
+                <div class="col-7">
+                    <p class="owner-text">パートリーダー:&nbsp;&nbsp;{{ part.owner }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>該当するパートはありません。</p>
+        {% endfor %}
+    </div>
+    <br>
+    {% comment %} ページネーションリンクの表示 {% endcomment %}
+    {% include 'common/pagenation.html' %}
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/common/base_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/schedule/schedule_detail.css' %}">
+<script>
+    const MUSIC_ATTENDANCE_URL = "{% url 'api-schedule:get_attendance_for_schedule' pk=schedule.id %}";
+    const MUSIC_ID = "{{ schedule.music.first.id }}";
+</script>
+<script src="{% static 'js/schedule/schedule_detail.js' %}"></script>
+{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+    <h2>活動詳細</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 id="header" class="header-text">{{ schedule.title }}</h3>
+        <div>
+            {% if perms.schedule.delete_schedule or user.is_admin %}
+            <a href="{% url 'schedule:schedule_delete' pk=schedule.id %}" role="button" class="btn delete-btn">
+                <i class="fa-solid fa-trash delete-icon"></i>
+            </a>
+            {% endif %}
+            {% if perms.schedule.change_schedule or user.is_admin %}
+            <a href="{% url 'schedule:schedule_update' pk=schedule.id %}" role="button" class="btn edit-btn">
+                <i class="fa-solid fa-pen-to-square edit-icon"></i>
+            </a>
+            {% endif %}
+            <a href="{% url 'schedule:attendance_check' pk=schedule.id %}" role="button" class="btn attendance-btn">
+                <i class="fa-solid fa-check"></i>
+            </a>
+        </div>
+    </div>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">活動名:</p>
+        <span class="text-large wrap-text">{{ schedule.title }}</span>
+    </div>
+    <hr>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">日時:</p>
+        <span class="text-large wrap-text">{{ schedule.date }}</span>
+        <span class="text-large wrap-text">{{ schedule.start }} - {{ schedule.end }}</span>
+    </div>
+    <hr>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">場所:</p>
+        <span class="text-large wrap-text">{{ schedule.place }}</span>
+        {% comment %} あとでGoogle Mapsの埋め込みを追加 {% endcomment %}
+    </div>
+    <hr>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">内容:</p>
+        <span class="text-large wrap-text">{{ schedule.note | linebreaksbr }}</span>
+    </div>
+    <hr>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">曲:</p>
+        {% for music in schedule.music.all %}
+        <span class="text-large wrap-text">{{ music.title }}<a class="music-link" href="{% url 'music:music_detail' music.id %}" target="_blank">開く</a></span>
+        {% endfor %}
+    </div>
+    <hr>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">出欠情報:&nbsp;&nbsp;
+            <select id="select_attendance">
+                <option value="default" selected>パート別（デフォルト）</option>
+                {% for music in schedule.music.all %}
+                <option value="{{ music.id }}">{{ music.title|truncatechars:20 }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p class="help-text">出欠情報をパート別または曲別に表示できます。</p>
+        <div id="attendance-content" class="accordion">
+        </div>
+    </div>
+{% else %}
+    <p>出欠情報を表示するにはログインしてください。</p>
+{% endif %}
+{% endblock %}

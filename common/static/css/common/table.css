@@ -1,0 +1,101 @@
+.table-wrapper {
+    overflow-x: auto;
+    font-size: 12px
+}
+
+.orchestra-table {
+    text-align: left;
+}
+
+.orchestra-table > thead {
+    background-color: #F7EFE3;
+}
+
+.orchestra-table > thead > tr > th,
+.orchestra-table > tbody > tr > th,
+.orchestra-table > tfoot > tr > th,
+.orchestra-table > thead > tr > td,
+.orchestra-table > tbody > tr > td,
+.orchestra-table > tfoot > tr > td {
+    white-space: nowrap;
+}
+
+/* リスト部分のスタイル */
+.object-item {
+    border-bottom: 1px solid #dee2e6;
+    padding: 0.5rem;
+}
+
+/* 1個目は上の線をつける */
+.object-item:first-child {
+    border-top: 1px solid #dee2e6;
+}
+
+/* 奇数行と偶数行で背景色を変える */
+.object-item:nth-child(odd) {
+    background-color: #fdfbf5;
+}
+
+.object-item:nth-child(even) {
+    background-color: #ffffff;
+}
+
+/* テキストのスタイル */
+.item-name {
+    font-size: medium;
+    color: #2c3e50;
+    margin-bottom: 0.75rem;
+    /* テキストが長い場合は省略して表示 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-text-large {
+    font-size: small;
+    color: #3b4044;
+    margin-bottom: 0.5rem;
+    /* テキストが長い場合は省略して表示 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-text-small {
+    font-size: small;
+    color: #343a40;
+    margin-bottom: 0.25rem;
+    /* テキストが長い場合は省略して表示 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 追加ボタン */
+.add-btn {
+    background-color: #a3c9a8; /* 緑 */
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}
+
+/* 検索ボタン */
+.search-btn {
+    background-color: #a29e9e; /* グレー */
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}
+
+/* 検索フォーム */
+#searchModal input[id^="id_"], 
+#searchModal select[id^="id_"], 
+#searchModal textarea[id^="id_"] {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    width: 100%;
+}

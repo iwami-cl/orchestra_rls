@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/common/base_form.css' %}">
+<link rel="stylesheet" href="{% static 'css/common/base_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/schedule/attendance_check.css' %}">
+{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+    <h2>出欠確認</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 id="header" class="header-text">{{ schedule.title }}</h3>
+    </div>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">活動名:</p>
+        <span class="text-large wrap-text">{{ schedule.title }}</span>
+    </div>
+    <hr>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">日時:</p>
+        <span class="text-large wrap-text">{{ schedule.date }}</span>
+        <span class="text-large wrap-text">{{ schedule.start }} - {{ schedule.end }}</span>
+    </div>
+    <hr>
+    <div class="attendance-list-container">
+        <form method="post" class="mt-4" id="attendance-form">
+            {% csrf_token %}
+
+            <div class="row g-3">
+                {% for user in users %}
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center {% if user.has_leave %}bg-light on_leave{% endif %}">
+                                <span class="fw-bold wrap-text">{{ user }}({{ user.instrument.jp_name }})</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-0 text-start">
+                                        {% if user.attendance_status == 0 %}
+                                            <span class="badge bg-secondary">入力:&nbsp;未回答</span>
+                                        {% elif user.attendance_status == 1 %}
+                                            <span class="badge bg-success">入力:&nbsp;出席</span>
+                                        {% elif user.attendance_status == 2 %}
+                                            <span class="badge bg-warning text-dark">入力:&nbsp;遅刻</span>
+                                        {% elif user.attendance_status == 3 %}
+                                            <span class="badge bg-info text-dark">入力:&nbsp;早退</span>
+                                        {% elif user.attendance_status == 4 %}
+                                            <span class="badge bg-danger">入力:&nbsp;欠席</span>
+                                        {% elif user.attendance_status == 5 %}
+                                            <span class="badge bg-secondary">入力:&nbsp;未定</span>
+                                        {% elif user.attendance_status == 6 %}
+                                            <span class="badge bg-light text-dark">休団</span>
+                                        {% else %}
+                                            {% if user.has_leave %}
+                                                <span class="badge bg-light text-dark">休団</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">入力:&nbsp;未回答</span>
+                                            {% endif %}
+                                        {% endif %}
+                                </div>
+                                <div class="mb-3 text-start">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status_{{ user.user_id }}" id="status_{{ user.user_id }}_1" value="1">
+                                        <label class="form-check-label attend" for="status_{{ user.user_id }}_1">出席</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status_{{ user.user_id }}" id="status_{{ user.user_id }}_4" value="4" {% if not user.has_leave %}checked{% endif %}>
+                                        <label class="form-check-label absent" for="status_{{ user.user_id }}_4">欠席</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status_{{ user.user_id }}" id="status_{{ user.user_id }}_6" value="6" {% if user.has_leave %}checked{% endif %}>
+                                        <label class="form-check-label on_leave" for="status_{{ user.user_id }}_6">休団</label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-0 text-start">
+                                    <label for="note_{{ user.user_id }}" class="form-label">備考</label>
+                                    <textarea class="form-control wrap-text"
+                                        id="note_{{ user.user_id }}"
+                                        name="note_{{ user.user_id }}"
+                                        rows="2"
+                                        maxlength="{{ attendance_max_length }}"
+                                        placeholder="備考を入力">{% if user.attendance_note %}{{ user.attendance_note }}{% endif %}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <div class="alert alert-secondary mb-0">出欠対象ユーザーがいません。</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </form>
+    </div>
+    <div class="submit-row">
+        <button type="submit" class="btn btn-primary" form="attendance-form">保存</button>
+        <a href="{{ cancel_url }}" class="btn btn-secondary closebtn">戻る</a>
+    </div>
+{% endif %}
+{% endblock %}

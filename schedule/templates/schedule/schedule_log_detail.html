@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/common/base_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/schedule/schedule_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/schedule/schedule_log_detail.css' %}">
+{% endblock %}
+{% block extrascript %}
+<script src="{% static 'js/schedule/schedule_log_detail.js' %}"></script>
+{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+    <h2>活動履歴詳細</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 id="header" class="header-text">{{ schedule_log.title }}</h3>
+        <div>
+            {% if perms.schedule_log.delete_schedulelog or user.is_admin %}
+            <a href="{% url 'schedule:schedule_log_delete' pk=schedule_log.id %}" role="button" class="btn delete-btn">
+                <i class="fa-solid fa-trash delete-icon"></i>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card mb-3">
+            <div class="card-header"><p class="card-text text-muted mb-0">出席率：&nbsp;&nbsp;<span class="h5 text-primary">{{ tabulated_attendance.rate }}%</span></p></div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                    <p class="card-text text-muted">出席人数</p>
+                    <span class="h5">{{ tabulated_attendance.1 }}人</span>
+                    </div>
+                    <div class="col-4">
+                    <p class="card-text text-muted">欠席人数</p>
+                    <span class="h5">{{ tabulated_attendance.4 }}人</span>
+                    </div>
+                    <div class="col-4">
+                    <p class="card-text text-muted">休団人数</p>
+                    <span class="h5">{{ tabulated_attendance.6 }}人</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">活動名:</p>
+        <span class="text-large wrap-text">{{ schedule_log.title }}</span>
+    </div>
+    <hr>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">日時:</p>
+        <span class="text-large wrap-text">{{ schedule_log.date }}</span>
+        <span class="text-large wrap-text">{{ schedule_log.start }} - {{ schedule_log.end }}</span>
+    </div>
+    <hr>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">場所:</p>
+        <span class="text-large wrap-text">{{ schedule_log.place }}</span>
+        {% comment %} あとでGoogle Mapsの埋め込みを追加 {% endcomment %}
+    </div>
+    <hr>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">内容:</p>
+        <span class="text-large wrap-text">{{ schedule_log.note | linebreaksbr }}</span>
+    </div>
+    <hr>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">曲:</p>
+        <span class="text-large wrap-text">{{ schedule_log.music }}</span>
+    </div>
+    <hr>
+    <div class="row mb-2 text-start">
+        <p class="text-smoll">出欠一覧:&nbsp;&nbsp;</p>
+        <div id="attendance-content" class="accordion">
+            {% if attendance_list %}
+                {% for attendance in attendance_list %}
+                <div class="row attendance-row">
+                    <div class="col-10 text-start">
+                        <div class="row">
+                            <div class="col-9">
+                                <span class="username text-start wrap-text">{{ attendance.display_name }}</span>
+                            </div>
+                            <div class="col-3">
+                                {% if attendance.status == 1 %}<span class="answer attend">出席</span>{% endif %}
+                                {% if attendance.status == 4 %}<span class="answer absence">欠席</span>{% endif %}
+                                {% if attendance.status == 6 %}<span class="answer on_leave">休団</span>{% endif %}
+                            </div>
+                        </div>
+                        <p class="wrap-text">{{ attendance.note }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>出欠情報はありません。</p>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    <p>出欠情報を表示するにはログインしてください。</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block extrastyle %}
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container">
+  <p class="text-start fs-5">ようこそ、{{ user | truncatechars:15 }}さん！</p>
+
+  <div class="card mt-4">
+    <div class="card-header">
+      <h5 class="mb-0">あなたへのお知らせ</h5>
+    </div>
+    <div class="card-body">
+      <p class="text-muted">予定はまだ登録されていません</p>
+    </div>
+  </div>
+  
+  <div class="card mt-4">
+    <div class="card-header">
+      <h5 class="mb-0">次の活動</h5>
+    </div>
+    <div class="card-body">
+      <p class="text-muted">予定はまだ登録されていません</p>
+    </div>
+  </div>
+  
+{% else %}
+<a href="{% url 'user:login' %}" class="btn btn-primary">ログイン</a>
+{% endif %}
+{% endblock %}

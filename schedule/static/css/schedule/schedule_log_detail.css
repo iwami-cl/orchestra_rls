@@ -1,0 +1,4 @@
+/* ユーザーの出欠状況を表示するスタイル */
+.attendance-row {
+    border: 1px solid #ddd;
+}

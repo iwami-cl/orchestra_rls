@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}"/>
+<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <h1 id="header">{% if create %}パートを追加{% else %}{{ object.part_name }}を変更{% endif %}</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% for f in form %}
+            <div class="mb-3">
+                <div class="row mb-2 text-start koumoku">
+                    <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                    {% comment %}<span class="text-large">{{ user.username }}</span>{% endcomment %}
+                    {{ f }}
+                    {% if f.help_text %}
+                        <div class="form-text">{{ f.help_text|safe }}</div>
+                    {% endif %}
+                    {% for error in f.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        <div class="submit-row">
+            <button type="submit" class="btn btn-primary">保存</button>
+            {% if create %}
+            <a href="{% url 'instrument:instrument_part_list' %}" class="btn btn-secondary closebtn">戻る</a>
+            {% else %}
+            <a href="{% url 'instrument:instrument_part_delete' pk=object.id %}" class="btn btn-danger">削除</a>
+            <a href="{% url 'instrument:instrument_part_detail' pk=object.id %}" class="btn btn-secondary closebtn">戻る</a>
+            {% endif %}
+        </div>
+    </form>
+<script>
+</script>
+{% endblock %}

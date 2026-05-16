@@ -1,0 +1,26 @@
+.attendance-list-container {
+    margin-bottom: 20px;
+}
+
+/* カードのスタイル */
+.card-header {
+    background-color: #fbf2ca;
+    font-weight: bold;
+}
+
+/* 出席、欠席、休団のラベルに色を追加 */
+.form-check-label {
+    font-weight: bold;
+}
+
+.form-check-label.attend {
+    color: green;
+}
+
+.form-check-label.absent {
+    color: red;
+}
+
+.form-check-label.on_leave {
+    color: blue;
+}

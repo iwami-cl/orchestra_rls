@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}"/>
+<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+{{ form.media }}
+<script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/common/base_form.css' %}">
+{% endblock %}
+{% block title %}
+    <h1>{{ model }}を{{ update|yesno:"編集,追加" }}</h1>
+{% endblock %}
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% for f in form %}
+            <div class="mb-3">
+                <div class="text-start">
+                    <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}{% if f.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                </div>
+                <div class="text-start">
+                    {{ f }}
+                    {% if f.help_text %}
+                        <div class="form-text">{{ f.help_text|safe|linebreaks }}</div>
+                    {% endif %}
+                    {% for error in f.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        {% block submit_row %}
+        <div class="submit-row">
+            <button id="btn-submit" type="submit" class="btn btn-primary">保存</button>
+            <a href="{{ cancel_url }}" class="btn btn-secondary closebtn">戻る</a>
+        </div>
+        {% endblock %}
+    </form>
+<script>
+</script>
+{% endblock %}

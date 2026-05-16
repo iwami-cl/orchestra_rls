@@ -1,0 +1,14 @@
+/* 演奏曲リスト部分 */
+.part-item {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: #fafcff;
+}
+
+.owner-text {
+    font-size: small;
+    color: #343a40;
+    margin-bottom: 0.25rem;
+}

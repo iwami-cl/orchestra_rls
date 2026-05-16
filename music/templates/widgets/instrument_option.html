@@ -1,0 +1,9 @@
+<li data-instrument_id="{{ option.label_instance }}">
+    <label>
+    <input type="checkbox"
+        name="{{ widget.name }}"
+        value="{{ option.value }}"
+        {% if option.selected %}checked{% endif %}>
+    {{ option.label }}
+    </label>
+</li>

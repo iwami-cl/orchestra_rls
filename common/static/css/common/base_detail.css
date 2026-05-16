@@ -1,0 +1,13 @@
+.header-text {
+    max-width: 70%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wrap-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+}

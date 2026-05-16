@@ -1,0 +1,219 @@
+/* Base CSS for the user app
+背景	#F5F5F2	やさしいオフホワイト
+#8B6E4B	巣や文字に使った木の色
+アクセント緑	#6DAA6C	音符や葉っぱの若葉色
+ボタン緑	#A3C9A8
+ */
+
+#header-container {
+    text-align: left;
+    font-size: 18px;
+    background-color: #fdfbf5 !important;
+}
+ /* テナント名のスタイル */
+.tenant-name-wrapper {
+  container-type: inline-size;
+}
+#tenant-name {
+  /* フォントサイズを文字数に応じて調整 */
+  font-size: 10cqw;
+}
+
+#accordionMenu > .accordion-item > .accordion-header > .accordion-button {
+  padding: 0 0.5rem;
+  background: #7bc685;
+  color: #fff;
+  border: none;
+}
+
+.right-align {
+  text-align: right;
+}
+
+.card-text {
+  font-size: 0.85em;
+  text-align: left;
+}
+
+.left {
+  text-align: left;
+}
+
+.disable_after::after {
+  content: none;
+}
+
+.sub-menu {
+  padding-left: 20px;
+}
+
+#header-wrapper {
+    position: absolute;
+    right: 10px;
+}
+
+a.closebtn {
+    color: #ffffff !important;
+}
+
+#breadcrumb-container {
+    font-size: 0.8em;
+    background-color: #fff5d7;
+    margin-bottom: 0.5rem;
+}
+#breadcrumb {
+    --bs-breadcrumb-divider: ">";
+}
+
+#breadcrumb > .breadcrumb {
+    margin-bottom: 0;
+}
+
+.app-button{
+  display: block !important;
+}
+
+.app-button > a {
+  display: block;
+  width: 100%;
+  padding: 10px 0;
+  text-align: center;
+  background-color: #a3c9a8;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.menu-card {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.menu-card > button {
+  width: 100%;
+}
+
+.menu-card > button > a {
+  display: block;
+  width: 100%;
+  padding: 10px 0;
+  text-align: center;
+  background-color: #a3c9a8;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.menu-card > button > a > span {
+  font-size: 0.8rem;
+}
+
+.app-button {
+  font-size: 2.0em;
+  margin-bottom: 5px;
+}
+
+.schedule-button-group {
+  margin-top: 5px;
+  text-align: right;
+}
+.schedule-button-group .btn {
+  font-size: 0.8em;
+  padding: 2px 6px;
+}
+
+/* 詳細画面用共通ラベル部分 */
+span.text-smoll {
+    font-size: small;
+    font-weight: bold;
+    width: 150px;
+    display: inline-block;
+    color:rgb(81, 81, 81)
+}
+span.text-large, label.text-large {
+    font-size: large;
+    font-weight: bold;
+    padding-left: 1.5rem;
+}
+
+/* 編集画面用共通ラベル部分 */
+.koumoku {
+    margin: 0rem;
+}
+
+/* 編集ボタン */
+.edit-btn {
+    background-color: #007bff; /* 青 */
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}
+
+.edit-icon {
+    font-size: 1rem;
+    margin-bottom: 0px;
+}
+
+/* 削除ボタン */
+.delete-btn {
+    background-color: #dc3545; /* 赤 */
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}
+
+.delete-icon {
+    font-size: 1rem;
+    margin-bottom: 0px;
+}
+
+/* リンクの下線を消す */
+a {
+    text-decoration: none;
+}
+
+/* bootstrapのサイドメニューのカスタマイズ */
+#offcanvasID {
+    max-width: 85%;
+}
+
+/* ページネーションのカスタマイズ */
+.pagination-wrapper {
+    text-align: center;
+}
+
+.pagination {
+    justify-content: center
+}
+
+/* メッセージ部分のスタイル */
+.alert {
+    margin-top: 0.3rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+/* エラー */
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* 成功 */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* 警告 */
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}

@@ -1,0 +1,11 @@
+{% extends "common/base_form.html" %}
+
+{% block submit_row %}
+<div class="submit-row">
+    <button id="btn-submit" type="submit" class="btn btn-primary">保存</button>
+    {% if update %}
+    <a href="{% url 'music:formation_delete' pk=music_id formation_id=formation.id %}" class="btn btn-danger closebtn">削除</a>
+    {% endif %}
+    <a href="{{ cancel_url }}" class="btn btn-secondary closebtn">戻る</a>
+</div>
+{% endblock %}

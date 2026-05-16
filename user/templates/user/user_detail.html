@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/common/base_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/user/user_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/common/base_form.css' %}">
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <h2>プロフィール</h2>
+    <div id="content-wrapper">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 id="header" class="header-text">{{ show_user }}</h3>
+            <div>
+                {% if perms.user.delete_user or request.user.is_admin %}
+                <a href="{% url 'user:user_delete' pk=show_user.user_id %}" class="btn delete-btn" title="削除"><i class="delete-icon fa-solid fa-trash"></i></a>
+                {% endif %}
+                {% if show_user.user_id == request.user.user_id or perms.user.change_user or request.user.is_admin %}
+                <button type="button" title="編集" class="btn edit-btn" data-bs-toggle="modal" data-bs-target="#eventModal"><i class="edit-icon fa-solid fa-pen-to-square"></i></button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">ログインID:</span>
+            <span class="text-large wrap-text">{{ show_user.username }}</span>
+        </div>
+        <hr>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">ニックネーム:</span>
+            <span class="text-large wrap-text">{% if show_user.display_name %}{{ show_user.display_name }}{% endif %}</span>
+        </div>
+        <hr>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">性:</span>
+            <span class="text-large wrap-text">{{ show_user.last_name }}</span>
+        </div>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">名:</span>
+            <span class="text-large wrap-text">{{ show_user.first_name }}</span>
+        </div>
+        <hr>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">メールアドレス:</span>
+            <span class="text-large wrap-text">{{ show_user.email }}</span>
+        </div>
+        <hr>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">パート:</span>
+            <span class="text-large wrap-text">{{ show_user.instrument.name }}</span>
+        </div>
+        <hr>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">最終ログイン:</span>
+            <span class="text-large wrap-text">{{ show_user.last_login }}</span>
+        </div>
+        <hr>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">ロール:</span>
+            <span class="text-large wrap-text">{{ show_user.get_role_display }}</span>
+        </div>
+        <hr>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">権限:</span>
+            <div id="permission-list-wrapper">
+                <ul class="permission-list">
+                    {% for perm in all_permissions %}
+                        <li>
+                            <label>
+                                {{ perm.display_name }} {% if perm.permission in show_user.user_permissions.all %}<span class="text-success"><i class="edit-icon fa-solid fa-check"></i></span>{% endif %}
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% if show_user.user_id == request.user.user_id %}
+        <hr>
+        <div class="row mb-2 text-start">
+            <a href="{% url 'user:password_reset'%}?user_id={{ show_user.user_id }}">パスワードをリセット</a>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if show_user.user_id == request.user.user_id or perms.user.change_user or request.user.is_admin %}
+    <!-- 編集モーダル -->
+    <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content shadow-sm">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="eventModalLabel">プロフィールを変更</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="userDetailForm" method="post" action="{% url 'user:user_update' pk=show_user.user_id %}">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mb-2 text-start">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div>
+                                    {{ field }}<br>
+                                    {% if field.help_text %}
+                                        <small class="text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">閉じる</button>
+                    <button id="save-button" type="submit" form="userDetailForm" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ permission_presets|json_script:"permission-presets" }}
+    <script>
+        const PERMISSION_PRESETS = JSON.parse(document.getElementById('permission-presets').textContent);
+    </script>
+    <script src="{% static 'js/user/user_detail.js' %}"></script>
+    {% endif %}
+{% else %}
+    <p>出欠情報を表示するにはログインしてください。</p>
+{% endif %}
+{% endblock %}

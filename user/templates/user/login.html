@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/user/login.css' %}" />
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="card card-container">
+        <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
+        <p id="profile-name" class="profile-name-card"></p>
+        <form class="form-signin" method="post">
+            <span id="reauth-email" class="reauth-email"></span>
+            {% csrf_token %}
+            {{ form.username }}
+            {{ form.username.errors }}
+            {{ form.password }}
+            {{ form.password.errors }}
+            <button id="btn-login" class="btn btn-lg btn-primary btn-block btn-signin" type="submit">ログイン</button>
+        </form><!-- /form -->
+        <a href="{% url 'user:create_tenant' %}">新しい楽団を登録する</a>
+        <a href="{% url 'user:password_reset' %}">パスワードを忘れた</a>
+        <a href="{% url 'user:terms_of_service' %}">利用規約</a>
+    </div><!-- /card-container -->
+</div><!-- /container -->
+{% endblock %}

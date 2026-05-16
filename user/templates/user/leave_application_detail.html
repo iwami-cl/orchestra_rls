@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/common/base_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/common/table.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 id="header" class="header-text">{{ leave_application.user }}</h3>
+        <div>
+            <a href="{% url 'user:leave_application_update' pk=leave_application.object_id %}" role="button" class="btn edit-btn">
+                <i class="fa-solid fa-pen edit-icon"></i>
+            </a>
+            <a href="{% url 'user:leave_application_delete' pk=leave_application.object_id %}" role="button" class="btn delete-btn">
+                <i class="fa-solid fa-trash delete-icon"></i>
+            </a>
+        </div>
+    </div>
+    <div>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">ユーザー:</span>
+            <span class="text-large wrap-text">{{ leave_application.user }}</span>
+        </div>
+        <hr>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">開始日:</span>
+            <span class="text-large wrap-text">{{ leave_application.start_date }}</span>
+        </div>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">終了日:</span>
+            <span class="text-large wrap-text">{{ leave_application.end_date }}</span>
+        </div>
+        <div class="row mb-2 text-start">
+            <span class="text-smoll">理由:</span>
+            <span class="text-large wrap-text">{{ leave_application.reason }}</span>
+    </div>
+{% endblock %}

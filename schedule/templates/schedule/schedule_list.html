@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block extrastyle %}
+<script>
+	const attendanceUpdateApiUrl = "{% url 'api-schedule:api-attendance_update_short' %}";
+	const detailScheduleBaseUrl = "{% url 'schedule:schedule_detail' pk='00000000-0000-0000-0000-000000000000'%}".slice(0, -36);
+</script>
+<script src="{% static 'js/schedule/schedule_list.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/schedule/schedule_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<input type="hidden" id="createScheduleUrl" value="{% url 'schedule:schedule_create' %}">
+<div class="wrapper">
+	<input type="hidden" id="scheduleListApiUrl" value="{% url 'api-schedule:api-schedule_list' %}">
+	<!--メッセージ-->
+	{% if unanswered_count > 0 %}
+	<div class="alert alert-warning" role="alert">
+		<i class="fa-solid fa-circle-exclamation alert-icon"></i>回答が必要なスケジュールが {{ unanswered_count }} 件あります。
+	</div>
+	{% endif %}
+
+	<!-- ボタンクリックで月移動 -->
+	<div id="next-prev-button" style="display:flex;align-items:center;gap:0.75rem;">
+		<div class="nav-buttons" style="display:flex;gap:0.5rem;">
+			<button id="prev"><i class="fa-solid fa-caret-left"></i></button>
+			<button id="next"><i class="fa-solid fa-caret-right"></i></button>
+		</div>
+		<div id="monthDisplay" style="flex:1;text-align:center;font-weight:600;">
+			<!-- 年月をここに挿入 -->
+			<p id="monthYearDisplay"></p>
+		</div>
+		<div class="now-button">
+			<button id="now">今月</button>
+		</div>
+	</div>
+
+    <!-- 出欠色説明 -->
+	<div id="attend-helper">
+		<div class="attend-legend">
+			<div class="legend-item">
+				<span class="day-events active attendance-present"></span>
+				<span>出席 / 遅刻 / 早退</span>
+			</div>
+			<div class="legend-item">
+				<span class="day-events active attendance-absent"></span>
+				<span>欠席</span>
+			</div>
+			<div class="legend-item">
+				<span class="day-events active attendance-no-response"></span>
+				<span>未定 / 未回答</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- カレンダー -->
+	<div id="calendar"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="eventListForDayModal" tabindex="-1" aria-labelledby="eventListForDayLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content shadow-sm">
+			<div class="modal-header bg-primary text-white" id="eventListForDayHeader">
+				<h5 class="modal-title" id="eventListForDayLabel"></h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+			</div>
+			<div class="modal-body" id="eventListForDayBody">
+				<!-- イベント一覧 -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="close-event-list-modal" class="btn btn-outline-secondary" data-bs-dismiss="modal">閉じる</button>
+				{% if can_create %}
+				<button type="button" id="add-schedule" class="btn btn-outline-secondary">追加</button>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="attendanceModal" tabindex="-1" aria-labelledby="attendanceModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content shadow-sm">
+			<div class="modal-header bg-primary text-white">
+				<h5 class="modal-title" id="attendanceModalLabel">出欠を回答</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+			</div>
+			<div class="modal-body" id="attendanceBody">
+				<!-- メッセージ表示エリア -->
+				<div id="message" style="display: none;">
+					<p></p>
+				</div>
+				<input type="hidden" id="csrfToken" value="{{ csrf_token }}">
+				<input type="hidden" id="attendanceScheduleId" value="">
+				<div class="row mb-3">
+					<div class="col-3 text-start">
+						<h6>日付</h6>
+					</div>
+					<div class="col-9 text-start">
+						<span id="attendanceDate"></span>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-3 text-start">
+						<h6>時間</h6>
+					</div>
+					<div class="col-9 text-start">
+						<span id="attendanceTime"></span>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-3 text-start">
+						<h6>タイトル</h6>
+					</div>
+					<div class="col-9 text-start">
+						<span id="attendanceTitle"></span>
+					</div>
+				</div>
+
+				<div class="row mb-3">
+					<div class="col-3 text-start">
+						<h6>出欠</h6>
+					</div>
+					<div class="col-9 text-start">
+						<div id="attendanceOptions">
+							{% for value, label, required in select_attendance %}
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="attendance" id="attendance_{{ value }}" value="{{ value }}" required_note="{{ required }}">
+								<label class="form-check-label" for="attendance_{{ value }}">{{ label }}</label>
+								{% if required %}
+									<span class="text-danger help">*備考必須</span>
+								{% endif %}
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+
+				<div class="mb-3">
+					<h6><i class="bi bi-chat-dots"></i> 備考</h6>
+					<textarea class="form-control" id="attendanceNote" rows="3" placeholder="必要があればコメントを入力"></textarea>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">閉じる</button>
+				<button type="button" id="attendanceSubmit" class="btn btn-primary">送信</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

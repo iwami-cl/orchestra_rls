@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  {% load i18n static %}
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="{% static 'js/common/jquery-3.7.1.min.js' %}"></script>
+  <script src="{% static 'js/common/popper.min.js' %}"></script>
+  <!-- Bootstrap5のCDNを設定 -->
+  <link rel="stylesheet" href="{% static "css/common/bootstrap.min.css" %}">
+  <script src="{% static "js/common/bootstrap.min.js" %}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/user/base.css' %}" />
+  <title>OtoNoSu</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/common/all.min.css' %}" />
+  <script src="{% static 'js/user/base.js' %}"></script>
+  {% block extrastyle %}
+  {% endblock %}
+</head>
+
+<body>
+  {% block header %}
+    <header>
+      <div class="container text-center" id="header-container">
+        <div class="row">
+          <div class="col-3">
+            <a href="{% url 'index' %}" class="text-dark text-decoration-none">
+              <img src="{% static 'image/user/logo.png' %}" alt="Logo" class="me-2" style="height: 60px;">
+            </a>
+          </div>
+          <div class="col-6 d-flex align-items-center justify-content-center tenant-name-wrapper" style="height: 60px;">
+            <span id="tenant-name"><strong>{{ user.tenant.name|truncatechars:20 }}</strong></span>
+          </div>
+          <div class="col-3 d-flex align-items-center justify-content-end" style="height: 60px;">
+            <div id="header-wrapper" class="w-100 d-flex align-items-center justify-content-end" style="position: relative;">
+              <a id="btn-menu" class="btn" data-bs-toggle="offcanvas" href="#offcanvasID" role="button" aria-controls="offcanvasID">
+              <i class="fa-solid fa-bars"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% if user.is_authenticated %}
+      <div class="container" id="breadcrumb-container">
+        {% load breadcrumbs %}
+        <nav aria-label="breadcrumb" id="breadcrumb">
+          <ol class="breadcrumb">
+            {% for crumb in request.path|breadcrumbs %}
+              <li class="breadcrumb-item">
+                <a href="{{ crumb.url }}">{{ crumb.name|safe  }}</a>
+              </li>
+            {% endfor %}
+          </ol>
+        </nav>
+      </div>
+      {% endif %}
+      {% if messages %}
+      <div class="container" id="messages-container">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}"><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </header>
+  {% endblock header %}
+  <!-- templates/base.html -->
+
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasID" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel">メニュー</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        {% if user.is_authenticated %}
+        <h4>{{ user|truncatechars:20 }}</h4>
+        <div class="row">
+          <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'user:user_detail' pk=user.user_id %}" role="button"><i class="app-button fa-solid fa-user"></i><span>プロフィール</span></a></button></div>
+          {% if perms.user.view_tenantuser or user.is_admin %}
+          <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'user:user_list' %}" role="button"><i class="app-button fa-solid fa-users"></i><span>団員</span></a></button></div>
+          {% endif %}
+          
+        </div>
+        <div class="row">
+          {% if perms.user.change_tenantuser or user.is_admin %}
+          <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'tenant_update' pk=user.tenant_id %}" role="button"><i class="app-button fa-solid fa-building"></i><span>団体</span></a></button></div>
+          {% endif %}
+          {% if perms.user.view_leaveapplication or user.is_admin %}
+          <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'user:leave_application_list' %}" role="button"><i class="app-button fa-solid fa-bed"></i><span>休団申請</span></a></button></div>
+          {% endif %}
+        </div>
+        <div class="row">
+          {% if perms.schedule.view_schedule or user.is_admin %}
+          <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'schedule:schedule_list' %}" role="button"><i class="app-button fa-solid fa-calendar"></i><span>活動</span></a></button></div>
+          {% endif %}
+          {% if perms.user.view_schedule_log or user.is_admin %}
+          <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'schedule:schedule_log_list' %}" role="button"><i class="app-button fa-solid fa-clock-rotate-left"></i><span>活動履歴</span></a></button></div>
+          {% endif %}
+          {% comment %}
+          {% if perms.instrument.view_instrumentpart or user.is_admin %}
+          <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'instrument:instrument_part_list' %}" role="button"><i class="app-button fa-solid fa-drum"></i><span>パート</span></a></button></div>
+          {% endif %}
+          {% endcomment %}
+        </div>
+        <div class="row">
+          {% if perms.music.view_music or user.is_admin %}
+          <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'music:music_list' %}" role="button"><i class="app-button fa-solid fa-music"></i><span>演奏曲</span></a></button></div>
+          {% endif %}
+        </div>
+        <hr>
+        <div class="right-align">
+          
+          <form action="{% url 'user:logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button id="btn-logout" type="submit" class="btn btn-outline-dark"><i class="fa-solid fa-right-from-bracket"></i><span>ログアウト</span></button>
+          </form>
+        </div>
+        {% else %}
+        <ul class="list-group">
+          <li class="list-group-item"><a href="{% url 'index' %}">トップ</a></li>
+          <li class="list-group-item"><a href="{% url 'user:login' %}">ログイン</a></li>
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="container mx-auto text-center">
+    {% block title %}
+    {% endblock %}
+    {% block content %}
+    {% endblock %}
+  </div>
+  <br>
+</body>

@@ -1,0 +1,231 @@
+@charset "utf-8";
+
+/*全体*/
+.wrapper{
+    max-width: 600px;
+    margin: 0 auto;
+    color: #666;
+}
+
+#monthYearDisplay {
+    font-size: 1.2rem;
+    margin: 0;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+/*カレンダー*/
+#calendar {
+    text-align: center;
+    width: 100%;
+    background: #fff;
+}
+
+table {
+    outline: 1px solid #ddd;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+th {
+    background-color: #fff;
+    color: #000;
+    outline: 0px solid #ddd;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    text-align: center;
+    font-size: 12px;
+}
+
+tr {
+    outline: 1px solid #ddd;
+}
+
+td {
+    outline: 0px solid #ddd;
+    padding-top: 0px;
+    padding-bottom: 15px;
+    text-align: center;
+    font-size: 0.7rem;
+}
+
+/*イベントセル*/
+.day-events {
+    font-size: 0.6rem;
+    text-align: center;
+    margin: 2px 0px;
+    padding: 0.2rem 0.2rem;
+    border-radius: 4px;
+    background-color: #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 2em;
+}
+
+.day-events.active {
+    font-weight: bold;
+    color: #000000;
+}
+
+/*出欠の状態で色分け*/
+.day-events.active.attendance-present {
+    background-color: #c2ffca;
+    font-weight: bold;
+}
+.day-events.active.attendance-absent {
+    background-color: #fa9999;
+    font-weight: bold;
+}
+.day-events.active.attendance-late {
+    background-color: #c2ffca;
+    font-weight: bold;
+}
+.day-events.active.attendance-leave-early {
+    background-color: #c2ffca;
+    font-weight: bold;
+}
+.day-events.active.attendance-no-response {
+    background-color: #fff757;
+    font-weight: bold;
+}
+
+
+/*日曜日*/
+td:first-child.active .day-number {
+    color: red;
+}
+/*土曜日*/
+td:last-child.active .day-number {
+    color: blue;
+}
+/*前後月の日付*/
+td.disabled {
+    color: #ccc;
+}
+
+/*ボタン*/
+#next-prev-button {
+    position: relative;
+}
+#next-prev-button button{
+    cursor: pointer;
+    background: #7bc685;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    padding: 0.1rem 1rem;
+    margin: 0;
+    font-weight: bold;
+}
+
+#prev {
+    float: left;
+}
+#next {
+    float: right;
+}
+
+#myBandHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+#btnCreateBand {
+    font-size: 12px;
+    padding: 3px 12px;
+}
+
+/*モーダル共通*/
+.modal-content {
+    height: 90vh;
+}
+
+.modal-body {
+    overflow-y: scroll;
+}
+
+/*イベント詳細モーダル*/
+#eventListForDay .modal-header {
+    background-color: #7bc685;
+    color: white;
+    border-bottom: none;
+}
+
+#eventListForDay .modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.event-item {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+/*出欠回答モーダル*/
+#attendanceModal .modal-header {
+    background-color: #7bc685;
+    color: white;
+    border-bottom: none;
+} 
+#attendanceModal .modal-body {
+    font-size: 1rem;
+    text-align: left;
+}
+
+/*ヘルプテキスト*/
+.help.text-danger {
+    font-size: 0.6rem;
+}
+
+/* カレンダーの出欠色説明表示部分 */
+#attend-helper { 
+    margin-top: 0.5rem;
+    display: flex; 
+    justify-content: left; 
+    font-size: small;
+}
+
+.attend-legend { 
+    display: flex; 
+    gap: 1rem; 
+    align-items: center; 
+}
+
+.legend-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+}
+
+.legend-item .day-events { 
+    display: inline-block; 
+    width: 1.2rem; 
+    height: 1.2rem; 
+    border-radius: 0.25rem; 
+}
+
+/* アラート部分のbootstrapのスタイル上書き */
+.alert {
+    position: relative;
+    padding: 0.5rem 0rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+.alert-warning {
+    color: #664d03;
+    background-color: white;
+    border: none;
+}
+
+.alert-icon {
+    margin-right: 0.5rem;
+    color: yellow;
+    background-color: black;
+    border-radius: 50%;
+    border: solid 1px black;
+}

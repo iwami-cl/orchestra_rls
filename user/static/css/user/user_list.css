@@ -1,0 +1,25 @@
+/* 追加モーダルのスタイル
+user_list.cssにも同様のスタイルがあるため、どちらも同じになるようにすること
+*/
+.modal-header {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+    max-height: 10vh; /* ヘッダーの高さを制限 */
+}
+
+.modal-body {
+    /* モーダルの内容を縦スクロール可能にする */
+    max-height: 70vh; /* モーダルの高さを制限 */
+    overflow-y: auto; /* 縦スクロールを有効にする */
+}
+
+.modal-footer {
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    max-height: 10vh; /* フッターの高さを制限 */
+}
+
+#id_permissions {
+    max-height: 200px; /* 高さを制限 */
+    overflow-y: auto; /* 縦スクロールを有効にする */
+}

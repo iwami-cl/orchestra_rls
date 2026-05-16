@@ -1,0 +1,95 @@
+/* schedule_detail.css */
+/* 曲の部分のリンク設定 */
+.music-link {
+    margin-left: 0.5rem;
+    font-size: small;
+    text-decoration: none;
+}
+.music-link:hover {
+    text-decoration: underline;
+}
+
+/* 出欠情報の選択肢のスタイル設定 */
+#select_attendance {
+    margin-bottom: 1rem;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    border: 1px solid #d4dbe9;
+    max-width: 100%;
+}
+
+#select_attendance option {
+    padding: 0.25rem;
+    font-size: small;
+}
+
+/* 出欠ステータスのテーブル設定 */
+td {
+    padding-right: 1rem;
+}
+
+/* 出欠ステータスの色設定 */
+.attend {
+    color: #16a34a;
+}
+
+.late, .early {
+    color: #f59e0b;
+}
+
+.absence {
+    color: #dc2626;
+}
+
+.pending, .unknown {
+    color: #6b7280;
+}
+
+.fa-position-left {
+    position: absolute;
+    top: calc(50% - .5em);
+    left: 1rem;
+}
+
+/* bootstrap アコーディオンのカスタマイズ */
+/* アコーディオンヘッダーのカスタム */
+.accordion-button {
+    padding: 0.5rem 0.5rem;
+}
+
+/* .accordion-body のカスタム */
+.accordion-body {
+    padding: 0.2rem 0.2rem;
+}
+
+/* 楽器名部分 */
+.accordion-button p {
+    margin: 0;
+    margin-bottom: 0.2rem;
+    font-weight: bold;
+}
+
+/* 個別の出欠ステータス部分 */
+.answer {
+    font-size: small;
+    font-weight: normal;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.member-card {
+    border: #d4dbe9 1px solid;
+    margin: 0rem;
+}
+
+/* 削除ボタン */
+.attendance-btn {
+    background-color: #16a34a; /* ミントグリーン */
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}

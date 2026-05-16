@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}"/>
+<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <h1 id="header">削除しますか？</h1>
+    <p class="text-danger">※削除したデータは元に戻せません。</p>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="button-group mt-3" style="justify-content: center;">
+            <button id="btn-delete" type="submit" class="btn btn-danger">削除</button>
+            <a id="btn-cancel" href="{{ cancel_url }}" class="btn btn-secondary closebtn">戻る</a>
+        </div>
+    </form>
+    <style>
+        .button-group {
+            display: flex;
+            gap: 30px;
+        }
+    </style>
+<script>
+</script>
+{% endblock %}

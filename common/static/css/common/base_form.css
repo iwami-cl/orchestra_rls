@@ -1,0 +1,39 @@
+/*
+複数選択のフォームのスタイル
+*/
+div.multiple-choice {
+    height: 50vh;
+    overflow-y: scroll;
+    border: solid #ddd 1px;
+}
+
+/*
+入力欄のスタイル
+*/
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="url"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+}
+
+/* 送信欄のスタイル */
+.submit-row {
+    justify-content: flex-end;
+}
+
+/* ヘルプテキストのスタイル */
+.form-text > p {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 0.1rem;
+}

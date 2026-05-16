@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}"/>
+<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <h1>団体情報を変更する</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="submit-row">
+            <button type="submit" class="btn btn-primary">保存</button>
+            <a href="{% url 'index' %}" class="btn btn-secondary closebtn">戻る</a>
+        </div>
+    </form>
+    <a href="{% url 'user:terms_of_service' %}">利用規約</a>
+{% endblock %}

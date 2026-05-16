@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block extrastyle %}
+<script>
+	const detailScheduleBaseUrl = "{% url 'schedule:schedule_log_detail' pk='00000000-0000-0000-0000-000000000000'%}".slice(0, -36);
+</script>
+<script src="{% static 'js/schedule/schedule_log_list.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/schedule/schedule_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<input type="hidden" id="createScheduleUrl" value="{% url 'schedule:schedule_create' %}">
+<div class="wrapper">
+	<input type="hidden" id="scheduleListApiUrl" value="{% url 'api-schedule:api-schedule_log_list' %}">
+
+	<!-- ボタンクリックで月移動 -->
+	<div id="next-prev-button" style="display:flex;align-items:center;gap:0.75rem;">
+		<div class="nav-buttons" style="display:flex;gap:0.5rem;">
+			<button id="prev"><i class="fa-solid fa-caret-left"></i></button>
+			<button id="next"><i class="fa-solid fa-caret-right"></i></button>
+		</div>
+		<div id="monthDisplay" style="flex:1;text-align:center;font-weight:600;">
+			<!-- 年月をここに挿入 -->
+			<p id="monthYearDisplay"></p>
+		</div>
+		<div class="now-button">
+			<button id="now">今月</button>
+		</div>
+	</div>
+
+	<!-- カレンダー -->
+	<div id="calendar"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="eventListForDayModal" tabindex="-1" aria-labelledby="eventListForDayLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content shadow-sm">
+			<div class="modal-header bg-primary text-white" id="eventListForDayHeader">
+				<h5 class="modal-title" id="eventListForDayLabel"></h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+			</div>
+			<div class="modal-body" id="eventListForDayBody">
+				<!-- イベント一覧 -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="close-event-list-modal" class="btn btn-outline-secondary" data-bs-dismiss="modal">閉じる</button>
+				{% if can_create %}
+				<button type="button" id="add-schedule" class="btn btn-outline-secondary">追加</button>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
