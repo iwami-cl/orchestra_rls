@@ -17,7 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from user.views import IndexView, TenantUpdateView
+from user.views import IndexView, TenantUpdateView, debug_env
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +28,5 @@ urlpatterns = [
     path('api/schedule/', include("schedule.api.urls")),
     path('tenant/<uuid:pk>/', TenantUpdateView.as_view(), name='tenant_update'),  # 追加
     path('instrument/', include("instrument.urls")),  # 追加
+    path('debug-env/', debug_env),
 ]

@@ -4,7 +4,6 @@ uwsgi_param  CONTENT_TYPE       $content_type;
 uwsgi_param  CONTENT_LENGTH     $content_length;
 
 uwsgi_param  REQUEST_URI        $request_uri;
-uwsgi_param  PATH_INFO          $document_uri;
 uwsgi_param  DOCUMENT_ROOT      $document_root;
 uwsgi_param  SERVER_PROTOCOL    $server_protocol;
 uwsgi_param  REQUEST_SCHEME     $scheme;

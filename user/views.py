@@ -570,3 +570,11 @@ class LeaveApplicationDeleteView(OrchestraPermissionRequiredMixin, OrchestraDele
         context = super().get_context_data(**kwargs)
         context['cancel_url'] = reverse_lazy('user:leave_application_detail', kwargs={'pk': self.object.pk})
         return context
+
+
+def debug_env(request):
+    return HttpResponse(
+        f"SCRIPT_NAME={request.META.get('SCRIPT_NAME')}<br>"
+        f"PATH_INFO={request.META.get('PATH_INFO')}<br>"
+        f"REQUEST_URI={request.META.get('REQUEST_URI')}"
+    )

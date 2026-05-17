@@ -10,7 +10,7 @@ Group=root
 Environment="PATH=/usr/local/pyenv/versions/3.13.7/envs/otonosu-venv/bin:/usr/local/pyenv/bin:/usr/bin:/bin"
 
 # uWSGI の起動コマンド
-ExecStart=/usr/local/bin/uwsgi --ini /usr/local/dialog_pf/otonosu/orchestra_rls/orchestra_rls/environment/uwsgi/uwsgi.ini
+ExecStart=/usr/local/pyenv/versions/3.13.7/envs/otonosu-venv/bin/uwsgi --ini /usr/local/dialog_pf/otonosu/orchestra_rls/orchestra_rls/environment/uwsgi/uwsgi.ini
 
 Restart=always
 

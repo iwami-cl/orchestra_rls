@@ -25,7 +25,7 @@ SECRET_KEY = 'gok&_(52-eqf4cv8gm!+)uq06^#6yz&6g-2u9m2exxk6ch4^(('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -113,6 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# FORCE_SCRIPT_NAME = '/otonosu'
 AUTH_USER_MODEL = 'user.TenantUser'
 LOGIN_REDIRECT_URL = "index"
 LOGOUT_REDIRECT_URL = "user:login"
@@ -139,8 +140,35 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/otonosu_static/'
-STATIC_ROOT = 'otonosu_static/'
+STATIC_URL = '/otonosu/static/'
+STATIC_ROOT = '/usr/local/dialog_pf/otonosu/orchestra_rls/static/'
 
 # スケジュールの保持期間(年)
 SCHEDULE_RETENTION_DAYS = 3
+
+# ログ設定
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{levelname}] {asctime} {name}: {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "logs" / "django.log",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True,
+        },
+    },
+}

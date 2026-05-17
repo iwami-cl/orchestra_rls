@@ -1,13 +1,27 @@
+- ミドルウェア一覧
+| ミドルウェア | バージョン |
+| --- | --- |
+| Django | 5.2.7 |
+| psycopg2 | 2.9.7 |
+| pyenv | 2.3.0 |
+| postgreSQL | 15.7 |
+
+
+
+- DBの作成とRLSの設定
 - 以下のロールを作っておく
 dspf -> DBの所有者
-CREATE ROLE "dspf"
+CREATE ROLE "dspf";
 tenantuser -> RLS用のユーザー
-CREATE ROLE "tenantuser"
+CREATE ROLE "tenantuser";
 
 - dspfのロール
 - dspfには、tenantuserのADMIN OPTIONをつけておく
 GRANT tenantuser TO dspf WITH ADMIN OPTION;
-ALTER ROLE 'dspf' CREATEROLE;
+ALTER ROLE "dspf" CREATEROLE;
+
+- 本番環境の場合のロール
+
 
 - DB削除
 ```
@@ -156,3 +170,114 @@ python manage.py insert_music
 python manage.py insert_schedule
 python manage.py insert_attendance
 ```
+
+- 環境構築
+- ソースコードのクローン
+```
+mkdir /usr/local/dialog_pf/otonosu
+cd /usr/local/dialog_pf/otonosu
+git clone git@github.com:iwami-cl/orchestra_rls.git
+cd orchestra_rls
+```
+-　最新のコードをpull
+```
+git pull origin main
+```
+
+- pyenvのインストール
+```
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+```
+
+- pyenvの設定
+```
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo -e 'if command -v pyenv 1>/devnull 2>&1; then\n  eval "$(pyenv init --path)"\nfi' >> ~/.bashrc
+source ~/.bashrc
+```
+
+- xzのインストール
+```
+sudo yum install -y xz xz-devel
+```
+
+- Python 3.13.7のインストール
+```
+pyenv install 3.13.7
+```
+
+- アプリケーションのルートディレクトリで、Python 3.13.7を使用するように設定
+```
+cd /usr/local/dialog_pf/otonosu/orchestra_rls
+pyenv local 3.13.7
+ls -a .python-version
+```
+
+- pyenv-virtualenvのインストール
+```
+git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
+```
+
+- pyenv-virtualenvの最新コードをpull
+```
+cd ~/.pyenv/plugins/pyenv-virtualenv
+git pull origin master
+```
+
+- pyenv-virtualenvの設定
+```
+echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+
+
+- 仮想環境の構築(Python 3.13.7を使用)
+```
+cd /usr/local/dialog_pf/otonosu/orchestra_rls
+pyenv virtualenv 3.13.7 otonosu-venv
+```
+
+- 仮想環境を作り直す
+```
+rm -rf otonosu-venv
+python -m venv otonosu-venv
+```
+
+- 仮想環境の起動
+```
+pyenv activate otonosu-venv
+(otonosu-venv) [root@vm-5dc5db51-92 orchestra_rls]#
+```
+
+- 仮想環境の終了
+```
+pyenv deactivate
+``` 
+
+- 依存関係のインストール
+```
+pip install -r requirements.txt
+```
+
+- 環境変数の設定
+```
+export DJANGO_SETTINGS_MODULE=orchestra_rls.settings
+export DB_NAME=ORCHESTRA_DB_RLS
+export DB_USER=dspf
+export DB_PASSWORD=your_password
+export DB_HOST=localhost
+export DB_PORT=5432
+```
+
+- マイグレーションの実行(仮想環境を起動している状態で実行)
+```
+python manage.py migrate
+```
+
+- 静的ファイルの収集
+```
+python manage.py collectstatic
+```
+
