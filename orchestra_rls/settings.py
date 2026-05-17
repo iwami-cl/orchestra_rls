@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os.path
+import sys
+import glob
+import importlib
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -57,6 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'orchestra_rls.middleware.RlsMiddleware',
+    'orchestra_rls.middleware.DebugPathMiddleware',
 ]
 
 ROOT_URLCONF = 'orchestra_rls.urls'
@@ -172,3 +177,40 @@ LOGGING = {
         },
     },
 }
+
+
+###########################################
+# 定数定義はここより上
+###########################################
+
+try:
+    from .otonosu_settings import *
+except:
+    print('orchestra settings not found')
+
+custom_settings_path = os.environ.get('OTONOSU_SETTINGS', None)
+if custom_settings_path:
+    print(f'import settings from ' + custom_settings_path)
+    sys.path.append(os.path.join(os.path.dirname(__file__), custom_settings_path))
+    try:
+        from orchestra_rls.otonosu_settings import *
+    except:
+        print('orchestra settings not found')
+
+    current_dir = os.getcwd()
+    try:
+        os.chdir(custom_settings_path)
+        orchestra_settings_files = glob.glob('orchestra_settings_*.py')
+        if orchestra_settings_files:
+            for file in sorted(orchestra_settings_files):
+                mod_name = file[:-3]
+                print(f'****** import {mod_name} ******')
+                custom_settings = importlib.import_module(mod_name)
+                for setting_name in dir(custom_settings):
+                    if setting_name.startswith('_') or setting_name.endswith('_'):
+                        continue
+                    setting_value = getattr(custom_settings, setting_name)
+                    print('{0} = {1}'.format(setting_name,setting_value if not isinstance(setting_value, str) else f'\'{setting_value}\''))
+                    globals().update({setting_name: setting_value})
+    finally:
+        os.chdir(current_dir)

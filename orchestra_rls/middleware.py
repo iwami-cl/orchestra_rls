@@ -1,6 +1,8 @@
 from django.db import connection
 from contextlib import contextmanager
 
+from django.conf import settings
+
 
 @contextmanager
 def tenant_context(tenant_id: str):
@@ -35,3 +37,14 @@ class RlsMiddleware:
         else:  # for administration of all tenants.
             response = self.get_response(request)
         return response
+
+
+class DebugPathMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if settings.DEBUG:
+            print("PATH_INFO:", request.META.get("PATH_INFO"))
+            print("SCRIPT_NAME:", request.META.get("SCRIPT_NAME"))
+            return self.get_response(request)
