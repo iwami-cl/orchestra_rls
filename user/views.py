@@ -1,20 +1,15 @@
 from django.contrib import messages
 
-from django.views.generic import CreateView, DeleteView, TemplateView, UpdateView, ListView
+from django.views.generic import CreateView, DeleteView, TemplateView, UpdateView
 from django.contrib.auth.views import LoginView as BaseLoginView, LogoutView as BaseLogoutView
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from urllib3 import request
 
 from instrument.models import Instrument
-from music import models
 from .forms import LeaveApplicationUpdateForm, LoginFrom, TenantForm, UserForm
 from schedule.models import Schedule, Attendance
 import datetime
 from .models import LeaveApplication, PermissionPreset, Tenant, TenantUser, UserActivateTokens, CustomPermission
-from django.db import transaction
 from django.contrib.auth import login
 from django.shortcuts import redirect
 from .forms import TenantSignUpForm, PasswordResetForm
@@ -27,6 +22,7 @@ from common.views import OrchestraDeleteMixin, OrchestraPermissionRequiredMixin
 import django_filters 
 from django_filters.views import FilterView
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # def activate_user(request, activate_token):
 #     activated_user = UserActivateTokens.objects.activate_user_by_token(
@@ -56,8 +52,7 @@ class LogoutView(BaseLogoutView):
 
 
 # メニュー画面のビュー
-@method_decorator(login_required, name='dispatch')
-class IndexView(TemplateView):
+class IndexView(LoginRequiredMixin, TemplateView):
     """ ホームビュー """
     template_name = "index.html"
 
@@ -390,8 +385,7 @@ class InviteUserForm(forms.Form):
     last_name = forms.CharField(label="姓", required=False)
 
 
-@method_decorator(login_required, name='dispatch')
-class InviteUserView(OrchestraPermissionRequiredMixin, TemplateView):
+class InviteUserView(LoginRequiredMixin, OrchestraPermissionRequiredMixin, TemplateView):
     """
     団員を招待するビュー。
     - GET: 招待フォームを表示
@@ -445,8 +439,7 @@ class InviteUserView(OrchestraPermissionRequiredMixin, TemplateView):
 
 
 # 休団申請作成ビュー
-@method_decorator(login_required, name='dispatch')
-class LeaveApplicationCreateView(OrchestraPermissionRequiredMixin, CreateView):
+class LeaveApplicationCreateView(LoginRequiredMixin, OrchestraPermissionRequiredMixin, CreateView):
     model = LeaveApplication
     form_class = LeaveApplicationForm
     template_name = "user/leave_application_form.html"
@@ -489,8 +482,7 @@ class LeaveApplicationCreateView(OrchestraPermissionRequiredMixin, CreateView):
 
 
 # 休団申請更新ビュー
-@method_decorator(login_required, name='dispatch')
-class LeaveApplicationUpdateView(OrchestraPermissionRequiredMixin, UpdateView):
+class LeaveApplicationUpdateView(LoginRequiredMixin, OrchestraPermissionRequiredMixin, UpdateView):
     model = LeaveApplication
     form_class = LeaveApplicationUpdateForm
     template_name = "user/leave_application_form.html"
@@ -521,8 +513,7 @@ class LeaveApplicationFilter(django_filters.FilterSet):
 
 
 # 休団申請一覧ビュー
-@method_decorator(login_required, name='dispatch')
-class LeaveApplicationListView(OrchestraPermissionRequiredMixin, FilterView):
+class LeaveApplicationListView(LoginRequiredMixin, OrchestraPermissionRequiredMixin, FilterView):
     model = LeaveApplication
     template_name = "user/leave_application_list.html"
     context_object_name = "leave_applications"
@@ -548,8 +539,7 @@ class LeaveApplicationListView(OrchestraPermissionRequiredMixin, FilterView):
 
 
 # 休団申請の詳細ビュー
-@method_decorator(login_required, name='dispatch')
-class LeaveApplicationDetailView(OrchestraPermissionRequiredMixin, TemplateView):
+class LeaveApplicationDetailView(LoginRequiredMixin, OrchestraPermissionRequiredMixin, TemplateView):
     template_name = "user/leave_application_detail.html"
 
     def get_context_data(self, **kwargs):
@@ -560,8 +550,7 @@ class LeaveApplicationDetailView(OrchestraPermissionRequiredMixin, TemplateView)
 
 
 # 休団申請の削除ビュー
-@method_decorator(login_required, name='dispatch')
-class LeaveApplicationDeleteView(OrchestraPermissionRequiredMixin, OrchestraDeleteMixin, DeleteView):
+class LeaveApplicationDeleteView(LoginRequiredMixin, OrchestraPermissionRequiredMixin, OrchestraDeleteMixin, DeleteView):
     model = LeaveApplication
     template_name = "user/leave_application_delete.html"
     success_url = reverse_lazy("user:leave_application_list")
