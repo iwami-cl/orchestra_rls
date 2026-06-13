@@ -47,8 +47,11 @@ INSTALLED_APPS = [
     'instrument',
     'schedule',
     'dashboard',
+    'stripe',
     'django_filters',
     'django_select2',
+    'notification',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -148,6 +151,9 @@ USE_TZ = True
 STATIC_URL = '/otonosu/static/'
 STATIC_ROOT = '/usr/local/dialog_pf/otonosu/orchestra_rls/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/otonosu/media/'
+
 # スケジュールの保持期間(年)
 SCHEDULE_RETENTION_DAYS = 3
 
@@ -177,7 +183,6 @@ LOGGING = {
         },
     },
 }
-
 
 ###########################################
 # 定数定義はここより上

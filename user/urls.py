@@ -15,6 +15,8 @@ urlpatterns = [
     path('password_reset', views.PasswordResetView.as_view(), name="password_reset"),  # パスワードリセットのURL
     path('password_reset/success/', views.password_reset_success, name="password_reset_success"),  # パスワードリセット成功のURL
     path('password_reset/activate/', views.password_reset_avtivate, name="password_reset_avtivate"),  # パスワードリセットのアクティベートURL
+    path('password_reset/authenticated/', views.PasswordResetForAuthenticatedUserView.as_view(), name="password_reset_authenticated"),  # ログインユーザー向けパスワードリセットのURL
+    path('password_reset/authenticated/success/', views.password_reset_success_for_authenticated, name="password_reset_success_for_authenticated"),  # ログインユーザー向けパスワードリセット成功のURL
     path('user/list/', views.TenantUserListView.as_view(), name='user_list'),  # テナントユーザーのリストビュー
     path('user/<uuid:pk>/detail/', views.UserDetailView.as_view(), name='user_detail'),  # ユーザーの詳細ビュー
     path('user/create/', views.tenant_user_update_create_view, name='user_create'),  # ユーザーの作成ビュー
@@ -26,4 +28,5 @@ urlpatterns = [
     path('leave_application/list/', views.LeaveApplicationListView.as_view(), name='leave_application_list'),  # 休団申請一覧
     path('leave_application/<uuid:pk>/detail/', views.LeaveApplicationDetailView.as_view(), name='leave_application_detail'),  # 休団申請の詳細
     path('leave_application/<uuid:pk>/delete/', views.LeaveApplicationDeleteView.as_view(), name='leave_application_delete'),  # 休団申請の削除
+    path('manual/', views.manualView, name='manual'),  # マニュアルビュー
 ]

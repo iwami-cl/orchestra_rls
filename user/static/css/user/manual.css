@@ -1,0 +1,5 @@
+.section-contents > .row {
+    margin-top: 0px;
+    border: 1px solid #ccc;
+    padding: 10px; 
+}

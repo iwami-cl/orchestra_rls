@@ -49,6 +49,8 @@ GRANT select, insert ON auth_group TO tenantuser;
 GRANT select, insert ON auth_permission TO tenantuser;
 GRANT select, insert ON auth_group_permissions TO tenantuser;
 GRANT select, delete ON user_activate_tokens TO tenantuser;
+GRANT select ON stripe_product TO tenantuser;
+GRANT select ON stripe_price TO tenantuser;
 ```
 - アプリからデータアクセスを許可する（tenant_usersは必須）
 ```
@@ -281,3 +283,10 @@ python manage.py migrate
 python manage.py collectstatic
 ```
 
+- 設定ファイルの読み込み
+- デフォルトでは、otonosu_settings.pyが存在すればそれを読み込む。
+```
+mkdir /root/.otonosu
+cp /usr/local/dialog_pf/otonosu/orchestra_rls/orchestra_rls/otonosu_settings.py /root/.otonosu/.
+export OTONOSU_SETTINGS=/root/.otonosu/otonosu_settings.py
+```

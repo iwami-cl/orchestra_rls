@@ -6,7 +6,7 @@ from django.urls import reverse, reverse_lazy
 from django.http import HttpResponse
 
 from instrument.models import Instrument
-from .forms import LeaveApplicationUpdateForm, LoginFrom, TenantForm, UserForm
+from .forms import LeaveApplicationUpdateForm, LoginFrom, PasswordResetForAuthenticatedForm, TenantForm, UserForm
 from schedule.models import Schedule, Attendance
 import datetime
 from .models import LeaveApplication, PermissionPreset, Tenant, TenantUser, UserActivateTokens, CustomPermission
@@ -71,17 +71,18 @@ class IndexView(LoginRequiredMixin, TemplateView):
         ).count()
 
         return events_count - attendance_count
+    
+    def get_next_schedules(self):
+        # 次の活動日の予定をすべて取得
+        today = datetime.date.today()
+        recent_schedules = Schedule.objects.filter(date__gte=today).order_by('date', 'start')
+        next_schedules = recent_schedules.filter(date=recent_schedules.first().date) if recent_schedules.exists() else []
+        return next_schedules
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Attendance.ATTENDANCE_CHOICESとAttendance.REQUIRED_NOTE_CHOICESを結合して辞書を作成
-        context["select_attendance"] = [(k[0], k[1], v[1]) for k, v in zip(Attendance.ATTENDANCE_CHOICES, Attendance.REQUIRED_NOTE)]  # 出欠選択肢と自由入力欄の設定を結合
-        last_attendance = Attendance.objects.filter(user=self.request.user,
-                                                    schedule__date__gte=datetime.datetime.now().date()).all().order_by(
-            "schedule__date").first()
-        if last_attendance is not None:
-            context.update({"last_schedule": last_attendance.schedule, "last_attendance": last_attendance})
+        context['next_schedules'] = self.get_next_schedules()
         
         # 回答が必要なスケジュール数をカウントしてテンプレートに渡す
         context['unanswered_count'] = self.count_unanswered_schedules()
@@ -165,8 +166,33 @@ class PasswordResetView(TemplateView):
             return self.render_to_response(context)
 
 
+class PasswordResetForAuthenticatedUserView(TemplateView):
+    """ ログインユーザー向けパスワードリセットビュー """
+    template_name = "user/password_reset_authenticated.html"
+    form_class = PasswordResetForAuthenticatedForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class()
+        context['model'] = self.model._meta.verbose_name if hasattr(self, 'model') else 'ユーザー'
+        context['cancel_url'] = reverse('index')
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save(request.user)
+            success_url = reverse_lazy("user:password_reset_success_for_authenticated")
+            return redirect(success_url)
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        return self.render_to_response(context)
+
 def password_reset_success(request):
     return render(request, 'user/password_reset_success.html')
+
+def password_reset_success_for_authenticated(request):
+    return render(request, 'user/password_reset_success_for_authenticated.html')
 
 
 def password_reset_avtivate(request):
@@ -327,7 +353,7 @@ class UserDetailView(TemplateView):
             return redirect('user:user_list')
 
 
-# 団員追加ビュー　団員一覧ビューのモーダルからのPOSTリクエストのみを受けるビュー
+# 団員追加・更新ビュー　団員一覧ビューのモーダルからのPOSTリクエストのみを受けるビュー
 def tenant_user_update_create_view(request, pk=None):
     if request.method != "POST":
         return HttpResponse(status=405)  # POST以外は許可しない
@@ -567,3 +593,18 @@ def debug_env(request):
         f"PATH_INFO={request.META.get('PATH_INFO')}<br>"
         f"REQUEST_URI={request.META.get('REQUEST_URI')}"
     )
+
+
+
+def introduce(request):
+    # ログインしている場合はホームにリダイレクト
+    if request.user.is_authenticated:
+        return redirect('index')
+    return render(request, 'introduce.html')
+
+
+def manualView(request):
+    if request.method == "GET":
+        return render(request, 'user/manual.html')
+    else:
+        return HttpResponse(status=405)

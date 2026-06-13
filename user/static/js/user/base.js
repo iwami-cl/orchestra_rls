@@ -33,5 +33,10 @@ function closeNotification() {
     }
 }
 
-// 使用例
-//showNotification("お知らせ", "これは通知の内容です", "通知ID");
+
+// // Service Workerの登録
+// if ("serviceWorker" in navigator) {
+//     navigator.serviceWorker.register("/sw.js")
+//         .then(() => console.log("Service Worker registered"));
+// }
+

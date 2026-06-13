@@ -157,6 +157,32 @@ class PasswordResetForm(forms.Form):
         )
 
 
+class PasswordResetForAuthenticatedForm(forms.Form):
+    new_password1 = forms.CharField(widget=forms.PasswordInput, required=True, label="新しいパスワード")
+    new_password2 = forms.CharField(widget=forms.PasswordInput, required=True, label="新しいパスワード（確認）")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password1 = cleaned_data.get("new_password1")
+        new_password2 = cleaned_data.get("new_password2")
+        if new_password1 and new_password2 and new_password1 != new_password2:
+            self.add_error("new_password2", "新しいパスワードが一致しません。")
+        return cleaned_data
+
+    def save(self, user, commit=True):
+        new_password = self.cleaned_data["new_password1"]
+        user.set_password(new_password)
+        if commit:
+            user.save()
+        return user
+    
+    class Meta:
+        model = TenantUser
+        fields = (
+            "new_password1",
+            "new_password2",
+        )
+
 class TenantForm(forms.ModelForm):
     class Meta:
         model = Tenant
