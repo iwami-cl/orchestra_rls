@@ -100,7 +100,7 @@ display_names = [
 ]
 
 # テナントとテナントユーザーのサンプルデータを挿入するコマンド
-# コマンドの実行方法: python manage.py insert_tenant
+# コマンドの実行方法: python manage.py insert_sample_tenant
 class Command(BaseCommand):
     help = 'テナントとテナントユーザーのサンプルデータを挿入します'
     def handle(self, *args, **kwargs):

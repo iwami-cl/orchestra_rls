@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otonosu</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-L0XZBFD+a5R/Q+jXRJXW+YY6nKl+MBLAye9ktyaUBtVGzgUqd6RLzfYvnkfwyaJV" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .content {
+            max-width: 80%;
+            margin: 0 auto;
+        }
+        .functions > .col {
+            margin: 20px;
+            border: #ddd solid 1px;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .plans > .col[first-child] {
+            border-top: #555 solid 1px;
+        }
+
+        .plans > .col {
+            border-bottom: #555 solid 1px;
+            padding: 10px;
+            background-color: rgb(255, 248, 207);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .start-free {
+            margin: 0px 20px 20px 20px;
+            padding: 10px 50px;
+            background-color: coral;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .help {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        .section {
+            padding: 1rem 0;
+        }
+
+        .section:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        .section:nth-child(even) {
+            background-color: #ffffff;
+        }
+        
+        .underline {
+            border-bottom: 2px solid red; /* 太さ2px、赤色の下線 */
+            display: inline-block;       /* 下線をテキスト幅に合わせる */
+            padding-bottom: 2px;         /* テキストと線の間隔 */
+        }
+
+        .feature__title em::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 2px;
+            width: 100%;
+            border-top: 8px solid rgba(247, 221, 20, 0.6);
+            border-radius: 100vmax;
+        }
+
+        
+    </style>
+</head>
+<header>
+</header>
+<body>
+<div class="section">
+    <div class="content">
+        <h1>あなたの楽団運営をサポートします。</h1>
+        <h3>楽団運営に必要な情報を『見やすい・簡単・便利』に大幅アップデート！！</h3>
+        <p>ブラウザでご利用いただけるので、アプリのインストール不要！</p>
+        <p>導入サポート付きなので、安心して始められます。もちろん、操作方法も簡単！</p>
+    </div>
+</div>
+<div class="section">
+    <div class="content">
+        <h2>楽団運営のこんな悩み、ありませんか？</h2>
+        <div class="container text-center">
+            <div id="carouselExample" class="carousel slide">
+                <div class="carousel-inner">
+                    <div class="carousel-item active feature__title">
+                        <h5>毎月予定表を作るのが大変！</h5>
+                        <em>月間予定も年間予定を自動で出力！</em>
+                    </div>
+                    <div class="carousel-item feature__title">
+                        <h5>出欠の回答漏れが多い</h5>
+                        <em>通知機能でシステムから自動でお知らせ！</em>
+                    </div>
+                    <div class="carousel-item feature__title">
+                        <h5>パートの参加人数を毎回まとめるのが大変！</h5>
+                        <em>パートごとや、取り扱う楽曲ごとに参加人数を自動で集計！</em>
+                    </div>
+                    <div class="carousel-item feature__title">
+                        <h5>メンバー管理が複雑</h5>
+                        <em>楽団のメンバーを管理するのは複雑...メンバーの追加、編集、削除が簡単に行える機能が欲しい。</em>
+                    </div>
+                    <div class="carousel-item feature__title">
+                        <h5>活動記録を探すのが大変！</h5>
+                        <em>過去の活動記録を簡単に記録・閲覧できます。</em>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="content">
+        <div style="text-align: center;">
+        <h6 style="color: coral;">無料で3か月間お試しいただけます</h6>
+        <button class="btn start-free" onclick="location.href='/home'">無料でお試し利用を始める</button>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="content">
+        <h2>楽団の活動を活発にするための機能が満載！！</h2>
+        <span class="help">※機能は随時追加予定</span>
+        <div class="container text-center">
+            <div class="row functions">
+                <div class="col">
+                    <h3>活動管理</h3>
+                    <p>楽団の予定を管理できます。予定の作成、編集、削除が簡単に行えます。</p>
+                </div>
+                <div class="col">
+                    <h3>出欠管理</h3>
+                    <p>出欠の予定と実績の両方を管理できます。出欠は、活動管理画面から簡単に確認できます。</p>
+                </div>
+                <div class="col">
+                    <h3>メンバー管理</h3>
+                    <p>楽団のメンバーを管理できます。メンバーの追加、編集、削除が簡単に行えます。</p>
+                </div>
+            </div>
+            <div class="row functions">
+                <div class="col">
+                    <h3>楽曲管理</h3>
+                    <p>演奏する楽曲を管理できます。楽曲の追加、編集、削除が簡単に行えます。</p>
+                </div>
+                <div class="col">
+                    <h3>編成管理</h3>
+                    <p>楽曲別に編成を管理できます。編成の作成、編集、削除が簡単に行えます。</p>
+                </div>
+                <div class="col">
+                    <h3>ダッシュボード</h3>
+                    <p>楽団の活動状況を一目で把握できるダッシュボード機能があります。予定の状況やメンバーの参加状況などを確認できます。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="content">
+        <h3>用途に合わせて選べる２つのプラン</h3>
+        <div class="container text-center">
+            <div class="row">
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col" style="background-color: yellow;">オススメ！</div>
+            </div>
+            <div class="row plans">
+                <div class="col">プラン</div>
+                <div class="col">ライトプラン</div>
+                <div class="col">ベーシックプラン</div>
+            </div>
+            <div class="row plans">
+                <div class="col">予定数</div>
+                <div class="col">100</div>
+                <div class="col">無制限</div>
+            </div>
+            <div class="row plans">
+                <div class="col">出欠管理</div>
+                <div class="col">〇</div>
+                <div class="col">〇</div>
+            </div>
+            <div class="row plans">
+                <div class="col">メンバー数</div>
+                <div class="col">70</div>
+                <div class="col">無制限</div>
+            </div>
+            <div class="row plans">
+                <div class="col">楽曲管理</div>
+                <div class="col">×</div>
+                <div class="col">〇</div>
+            </div>
+            <div class="row plans">
+                <div class="col">編成管理</div>
+                <div class="col">×</div>
+                <div class="col">〇</div>
+            </div>
+            <div class="row plans">
+                <div class="col">ダッシュボード</div>
+                <div class="col">×</div>
+                <div class="col">〇</div>
+            </div>
+            <div class="row plans">
+                <div class="col">月額料金</div>
+                <div class="col">660円</div>
+                <div class="col">990円</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

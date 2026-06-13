@@ -107,6 +107,7 @@
           {% if perms.music.view_music or user.is_admin %}
           <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'music:music_list' %}" role="button"><i class="app-button fa-solid fa-music"></i><span>演奏曲</span></a></button></div>
           {% endif %}
+          <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'user:manual' %}" role="button"><i class="app-button fa-solid fa-book"></i><span>マニュアル</span></a></button></div>
         </div>
         <hr>
         <div class="right-align">

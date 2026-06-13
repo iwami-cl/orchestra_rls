@@ -17,7 +17,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR("Tenantが存在しません"))
             return
 
-        ATTENDANCE_CHOICES_COPY = Attendance.ATTENDANCE_CHOICES
+        ATTENDANCE_CHOICES_COPY = [choice for choice in Attendance.ATTENDANCE_CHOICES if choice[0] != 6]  # 休団中は含めない
 
         # 出欠情報を全削除
         Attendance.objects.all().delete()

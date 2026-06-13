@@ -7,6 +7,14 @@ from music.models import Music
 from django_select2.forms import Select2MultipleWidget
 
 
+class TimeInput15Min(forms.TimeInput):
+    def __init__(self, attrs=None, format=None):
+        super().__init__(attrs=attrs, format=format)
+        if self.attrs is None:
+            self.attrs = {}
+        self.attrs['step'] = '900'
+
+
 class ScheduleForm(forms.ModelForm):
     music = forms.ModelMultipleChoiceField(
         queryset=Music.objects.filter(is_show=True).order_by('title'),
@@ -15,13 +23,13 @@ class ScheduleForm(forms.ModelForm):
         label="演奏曲")
     
     start = forms.TimeField(
-        widget=forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
+        widget=TimeInput15Min(format='%H:%M', attrs={'type': 'time'}),
         input_formats=['%H:%M'],
         label="開始時間",
         help_text="24時間表記で入力してください（例: 14:30）"
     )
     end = forms.TimeField(
-        widget=forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
+        widget=TimeInput15Min(format='%H:%M', attrs={'type': 'time'}),
         input_formats=['%H:%M'],
         label="終了時間",
         help_text="24時間表記で入力してください（例: 16:00）"

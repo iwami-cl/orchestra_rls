@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <title>商品トップ</title>
+    <link rel="stylesheet" href='{% static "style.css" %}'/>
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<body>
+    <section>
+      <h1>商品一覧</h1>
+      <hr />
+        <div class="product">
+            <div class="description">
+                <!-- 商品一覧をループで表示 -->
+                {% for product in product_list %}
+                  <h2>{{ product.name }}</h2>
+                  <picture>
+                    {%if product.file%}
+                  <img src="{{product.file.url}}" alt="image" style="width:auto;">
+                    {% endif %}  
+                </picture>
+                  <div>{{ product.description }}</div>
+
+                <!-- 商品に紐づく価格情報を表示 -->
+                {% for price_data in product.Prices.all %}
+                  <h4>価格：¥{{ price_data.get_display_price }}</h4>
+                  <form action="{% url 'create-checkout-session' product.id %}" method="POST">
+                  {% csrf_token %}
+                  <button type="submit">購入画面に進む</button>
+                  </form>
+                {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</body>
+</html>

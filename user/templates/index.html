@@ -8,22 +8,53 @@
 {% if user.is_authenticated %}
 <div class="container">
   <p class="text-start fs-5">ようこそ、{{ user | truncatechars:15 }}さん！</p>
-
+  {% comment %}
   <div class="card mt-4">
     <div class="card-header">
       <h5 class="mb-0">あなたへのお知らせ</h5>
     </div>
     <div class="card-body">
-      <p class="text-muted">予定はまだ登録されていません</p>
+      {% if not notifications %}
+        <p class="text-muted">予定はまだ登録されていません</p>
+      {% else %}
+        <ul class="list-group list-group-flush">
+          {% for notification in notifications %}
+            <li class="list-group-item">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="mb-1">{{ notification.title }}</h6>
+                  <p class="mb-0 text-muted">{{ notification.message }}</p>
+                </div>
+                <small class="text-muted">{{ notification.created_at|date:"Y-m-d H:i" }}</small>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
   </div>
+  {% endcomment %}
   
   <div class="card mt-4">
     <div class="card-header">
       <h5 class="mb-0">次の活動</h5>
     </div>
     <div class="card-body">
+      {% if not next_schedules %}
       <p class="text-muted">予定はまだ登録されていません</p>
+      {% else %}
+      <ul class="list-group list-group-flush">
+        {% for schedule in next_schedules %}
+        <li class="list-group-item">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p>{{ schedule.date }} {{ schedule.start }}~{{ schedule.end }}</p>
+              <h6 class="mb-1"><a href="{% url 'schedule:schedule_detail' pk=schedule.id %}">{{ schedule.title }}</a></h6>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
     </div>
   </div>
   

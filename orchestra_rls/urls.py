@@ -17,9 +17,13 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from user.views import IndexView, TenantUpdateView, debug_env
+from orchestra_rls import settings
+from user.views import IndexView, TenantUpdateView, debug_env, introduce
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
+    path('', introduce, name='introduce'),
     path('admin/', admin.site.urls),
     path('user/', include("user.urls")),
     path('home/', IndexView.as_view(), name="index"),
@@ -28,5 +32,10 @@ urlpatterns = [
     path('api/schedule/', include("schedule.api.urls")),
     path('tenant/<uuid:pk>/', TenantUpdateView.as_view(), name='tenant_update'),  # 追加
     path('instrument/', include("instrument.urls")),  # 追加
-    path('debug-env/', debug_env),
+    #path('debug-env/', debug_env),
+    #path('api/notification/', include("notification.api.urls")),  # 追加
+    #path('stripe/', include("stripe.urls")),  # 追加
 ]
+
+#urlpatterns += staticfiles_urlpatterns()
+#urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
