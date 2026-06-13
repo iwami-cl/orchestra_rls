@@ -25,16 +25,16 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('', introduce, name='introduce'),
     path('admin/', admin.site.urls),
-    path('user/', include("user.urls")),
-    path('home/', IndexView.as_view(), name="index"),
-    path('music/', include("music.urls")),
-    path('schedule/', include("schedule.urls")),
-    path('api/schedule/', include("schedule.api.urls")),
-    path('tenant/<uuid:pk>/', TenantUpdateView.as_view(), name='tenant_update'),  # 追加
-    path('instrument/', include("instrument.urls")),  # 追加
+    path('otonosu/user/', include("user.urls")),
+    path('otonosu/home/', IndexView.as_view(), name="index"),
+    path('otonosu/music/', include("music.urls")),
+    path('otonosu/schedule/', include("schedule.urls")),
+    path('otonosu/api/schedule/', include("schedule.api.urls")),
+    path('otonosu/tenant/<uuid:pk>/', TenantUpdateView.as_view(), name='tenant_update'),  # 追加
+    path('otonosu/instrument/', include("instrument.urls")),  # 追加
     #path('debug-env/', debug_env),
-    #path('api/notification/', include("notification.api.urls")),  # 追加
-    #path('stripe/', include("stripe.urls")),  # 追加
+    #path('otonosu/api/notification/', include("notification.api.urls")),  # 追加
+    #path('otonosu/stripe/', include("stripe.urls")),  # 追加
 ]
 
 #urlpatterns += staticfiles_urlpatterns()
