@@ -61,9 +61,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'orchestra_rls.middleware.RlsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'orchestra_rls.middleware.DebugPathMiddleware',
 ]
 

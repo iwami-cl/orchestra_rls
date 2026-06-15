@@ -47,4 +47,4 @@ class DebugPathMiddleware:
         if settings.DEBUG:
             print("PATH_INFO:", request.META.get("PATH_INFO"))
             print("SCRIPT_NAME:", request.META.get("SCRIPT_NAME"))
-            return self.get_response(request)
+        return self.get_response(request)
