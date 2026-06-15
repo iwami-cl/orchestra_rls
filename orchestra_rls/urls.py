@@ -24,7 +24,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('', introduce, name='introduce'),
-    path('admin/', admin.site.urls),
+    path('otonosu/admin/', admin.site.urls),
     path('otonosu/user/', include("user.urls")),
     path('otonosu/home/', IndexView.as_view(), name="index"),
     path('otonosu/music/', include("music.urls")),
