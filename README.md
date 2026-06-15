@@ -290,3 +290,9 @@ mkdir /root/.otonosu
 cp /usr/local/dialog_pf/otonosu/orchestra_rls/orchestra_rls/otonosu_settings.py /root/.otonosu/.
 export OTONOSU_SETTINGS=/root/.otonosu/otonosu_settings.py
 ```
+
+- ログローテーションの設定
+シンボリックリンクを作成して、ログローテーションの設定ファイルを/etc/logrotate.d/に配置する
+```
+ln -s /usr/local/dialog_pf/otonosu/orchestra_rls/orchestra_rls/environment/logrotate/otonosu /etc/logrotate.d/otonosu
+```
