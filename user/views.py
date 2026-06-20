@@ -6,7 +6,7 @@ from django.urls import reverse, reverse_lazy
 from django.http import HttpResponse
 
 from instrument.models import Instrument
-from .forms import LeaveApplicationUpdateForm, LoginFrom, PasswordResetForAuthenticatedForm, TenantForm, UserForm
+from .forms import LeaveApplicationUpdateForm, LoginFrom, PasswordResetForAuthenticatedForm, TenantForm, UserForm, CreateUserForm
 from schedule.models import Schedule, Attendance
 import datetime
 from .models import LeaveApplication, PermissionPreset, Tenant, TenantUser, UserActivateTokens, CustomPermission
@@ -206,7 +206,7 @@ def password_reset_avtivate(request):
 
 
 class TenantUserListFilter(django_filters.FilterSet):
-    email = django_filters.CharFilter(lookup_expr='icontains', label='メールアドレス')
+    username = django_filters.CharFilter(lookup_expr='icontains', label='ログインID')
     role = django_filters.ChoiceFilter(method='filter_by_role', label='ロール', choices=TenantUser.ROLE_CHOICES)
     instrument = django_filters.CharFilter(method='filter_by_instrument', label='担当楽器', help_text='楽器名、イニシャル、日本語名のいずれかで検索')
 
@@ -231,7 +231,7 @@ class TenantUserListFilter(django_filters.FilterSet):
 
     class Meta:
         model = TenantUser
-        fields = ['email', 'role', 'instrument']
+        fields = ['username', 'role', 'instrument']
 
 
 class TenantUserListView(OrchestraPermissionRequiredMixin, FilterView):
@@ -271,8 +271,8 @@ class TenantUserListView(OrchestraPermissionRequiredMixin, FilterView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # UserFormをコンテキストに追加
-        context['form'] = UserForm(instance=None, login_user=self.request.user)
+        # CreateUserFormをコンテキストに追加
+        context['form'] = CreateUserForm(instance=None, login_user=self.request.user)
         
         # ユーザーパーミッションをコンテキストに追加
         context['all_permissions'] = CustomPermission.objects.filter(private=False).select_related('permission')
@@ -372,20 +372,23 @@ def tenant_user_update_create_view(request, pk=None):
                 for perm in form.cleaned_data.get('permissions', []):
                     user.user_permissions.add(perm.permission)  # DjangoのPermissionモデルに関連付け
                 return redirect('user:user_detail', pk=pk)
+            messages.error(request, "ユーザーの更新に失敗しました。入力内容を確認してください。")
         return redirect('user:user_detail', pk=pk)
     else:
         if not request.user.has_perm("user.add_tenantuser") and not request.user.is_admin():
             messages.error(request, "ユーザーの追加権限がありません。")
             return redirect('user:user_list')
-        form = UserForm(request.POST, instance=None, login_user=request.user)
+        form = CreateUserForm(request.POST, instance=None, login_user=request.user)
         if form.is_valid():
             new_user = form.save(commit=False)
             new_user.tenant = request.user.tenant  # 作成するユーザーのテナントをログインユーザーと同じにする
+            new_user.set_password(form.cleaned_data['password1'])  # パスワードをハッシュ化して保存
             new_user.save()
             new_user.user_permissions.clear() # これでDjangoのPermissionモデルとの関連もクリアされる
             for perm in form.cleaned_data.get('permissions', []):
                 new_user.user_permissions.add(perm.permission)  # DjangoのPermissionモデルに関連付け
             return redirect('user:user_list')
+        messages.error(request, "ユーザーの追加に失敗しました。入力内容を確認してください。")
         return redirect('user:user_list')
 
 

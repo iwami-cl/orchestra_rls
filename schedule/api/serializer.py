@@ -96,7 +96,7 @@ class AttendanceForScheduleSerializer(serializers.Serializer):
         attendance_for_part = {}  # キーはinstrument_id
 
         # 楽器一覧を取得
-        parts = Instrument.objects.all().order_by('id')
+        parts = Instrument.objects.all().order_by('order', 'jp_name')
         for p in parts:
             part_id = str(p.id)
             if part_id not in attendance_for_part.keys():  # 楽器ごとに初期化
@@ -137,12 +137,12 @@ class AttendanceForScheduleSerializer(serializers.Serializer):
         attendance_for_music = {}  # キーはinstrument_id
 
         # FormationからInstrumentをグルーピングして取得
-        formations = Formation.objects.filter(music=music).select_related('instrument').prefetch_related('users').order_by('instrument__id', 'section')
+        formations = Formation.objects.filter(music=music).select_related('instrument').prefetch_related('users').order_by('instrument__order', 'section')
         for f in formations:
             f_key_str = str(f.instrument.id)
             if f_key_str not in attendance_for_music.keys():  # 楽器ごとに初期化
                 attendance_for_music[f_key_str] = {
-                    "instrument_name": f.instrument.name,
+                    "instrument_name": f.instrument.jp_name if f.instrument.jp_name else f.instrument.name,
                     'attend': [0,0,0,0,0,0],  # 未回答、出席、遅刻、早退、欠席、未定
                     "users": []
                 }

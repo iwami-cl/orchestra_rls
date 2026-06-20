@@ -247,7 +247,6 @@ class UserForm(forms.ModelForm):
         "display_name",
         "last_name",
         "first_name",
-        "email",
         "instrument",
         "role",  # ロールの選択肢を表示
         "permission_presets",  # 権限プリセットの選択肢を表示
@@ -277,7 +276,6 @@ class UserForm(forms.ModelForm):
             "display_name",
             "last_name",
             "first_name",
-            "email",
             "instrument",
             "role",  # ロールの選択肢を追加
         )
@@ -286,6 +284,31 @@ class UserForm(forms.ModelForm):
             'username': '必須。150文字以内。英数字と @/./+/-/_ のみ使用できます。',
             'instrument': '演奏曲に登録されている編成の内容は変更されません。'
         }
+
+
+class CreateUserForm(UserForm):
+    class Meta(UserForm.Meta):
+        model = TenantUser
+        fields = UserForm.Meta.fields + ("password1", "password2")  # 新規作成時はパスワードが必要
+
+    password1 = forms.CharField(widget=forms.PasswordInput, required=True, label="パスワード")
+    password2 = forms.CharField(widget=forms.PasswordInput, required=True, label="パスワード（確認）")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            self.add_error("password2", "パスワードが一致しません。")
+        return cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+            self.save_m2m()  # ManyToManyフィールドの保存
+        return user
 
 
 # 休団申請フォーム

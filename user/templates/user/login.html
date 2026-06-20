@@ -18,9 +18,11 @@
             {{ form.password.errors }}
             <button id="btn-login" class="btn btn-lg btn-primary btn-block btn-signin" type="submit">ログイン</button>
         </form><!-- /form -->
+        {% comment %}
         <a href="{% url 'user:create_tenant' %}">新しい楽団を登録する</a>
         <a href="{% url 'user:password_reset' %}">パスワードを忘れた</a>
         <a href="{% url 'user:terms_of_service' %}">利用規約</a>
+        {% endcomment %}
     </div><!-- /card-container -->
 </div><!-- /container -->
 {% endblock %}
