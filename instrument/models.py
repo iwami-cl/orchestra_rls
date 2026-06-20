@@ -8,6 +8,7 @@ class Instrument(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False, verbose_name="楽器名")
     initial = models.CharField(max_length=255, null=True, blank=False, verbose_name="イニシャル")
     jp_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="日本語名")
+    order = models.IntegerField(null=False, blank=False, default=0, verbose_name="表示順")
 
     tenant = models.ForeignKey('user.Tenant', on_delete=models.CASCADE, null=False, blank=False, verbose_name="テナント")
 

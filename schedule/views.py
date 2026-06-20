@@ -197,7 +197,7 @@ class AttendanceCheckView(OrchestraPermissionRequiredMixin, generic_view.Templat
             has_leave=Exists(leave_qs),
             attendance_status=Subquery(attendance.values("status")[:1]),
             attendance_note=Subquery(attendance.values("note")[:1]),
-        ).order_by('instrument__jp_name', 'username')
+        ).order_by('instrument__order', 'instrument__jp_name', 'username')
         context = self.get_context_data()
         
         context.update({

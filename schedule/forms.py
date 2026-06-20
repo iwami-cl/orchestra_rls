@@ -7,12 +7,20 @@ from music.models import Music
 from django_select2.forms import Select2MultipleWidget
 
 
+# いったん使用しない
 class TimeInput15Min(forms.TimeInput):
     def __init__(self, attrs=None, format=None):
         super().__init__(attrs=attrs, format=format)
         if self.attrs is None:
             self.attrs = {}
+        # 15分刻みにするための属性を追加
         self.attrs['step'] = '900'
+
+        # 初期値は00:00に設定
+        self.attrs['value'] = '00:00'
+        self.attrs['min'] = '00:00'
+        self.attrs['max'] = '23:45'
+        
 
 
 class ScheduleForm(forms.ModelForm):
@@ -23,13 +31,13 @@ class ScheduleForm(forms.ModelForm):
         label="演奏曲")
     
     start = forms.TimeField(
-        widget=TimeInput15Min(format='%H:%M', attrs={'type': 'time'}),
+        widget=forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
         input_formats=['%H:%M'],
         label="開始時間",
         help_text="24時間表記で入力してください（例: 14:30）"
     )
     end = forms.TimeField(
-        widget=TimeInput15Min(format='%H:%M', attrs={'type': 'time'}),
+        widget=forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
         input_formats=['%H:%M'],
         label="終了時間",
         help_text="24時間表記で入力してください（例: 16:00）"

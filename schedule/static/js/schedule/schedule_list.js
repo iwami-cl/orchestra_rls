@@ -231,6 +231,11 @@ $(function() {
 
                 // イベント詳細画面へのリンクボタンを追加
                 let link = detailScheduleBaseUrl + dayOfEvents[i]["id"];
+
+                // 現在の年月を取得し、URLにクエリパラメータとして追加
+                let currentYear = showDate.getFullYear();
+                let currentMonth = String(showDate.getMonth() + 1);
+                link += "?y=" + currentYear + "&m=" + currentMonth;
                 let detailLink = $('<a href="' + link + '" class="btn btn-sm btn-outline-secondary ms-2">詳細</a>');
                 $(event_element).append(detailLink);
 
