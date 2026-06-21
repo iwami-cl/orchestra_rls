@@ -49,7 +49,10 @@ class InstrumentCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
 
 class FormationUsersMultipleChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
-        return f"{obj}（パート: {obj.instrument.name}）"
+        if obj.instrument:
+            return f"{obj}（パート: {obj.instrument.name}）"
+        else:
+            return str(obj)
 
 
 class FormationForm(forms.ModelForm):

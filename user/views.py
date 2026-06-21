@@ -284,6 +284,7 @@ class TenantUserListView(OrchestraPermissionRequiredMixin, FilterView):
                 'permissions': list(preset.permissions.values_list('permission_id', flat=True))
             } for preset in presets
         }
+        context['add_permission'] = self.request.user.has_perm("user.add_tenantuser") or self.request.user.is_admin()
 
         context['total_count'] = self.get_queryset().count()
         context['model'] = self.model._meta.verbose_name
@@ -366,11 +367,13 @@ def tenant_user_update_create_view(request, pk=None):
             form = UserForm(request.POST, instance=user, login_user=request.user)
             if form.is_valid():
                 user = form.save(commit=False)
-                user.tenant = request.user.tenant  # 作成するユーザーのテナントをログインユーザーと同じにする
                 user.save()
-                user.user_permissions.clear() # これでDjangoのPermissionモデルとの関連もクリアされる
-                for perm in form.cleaned_data.get('permissions', []):
-                    user.user_permissions.add(perm.permission)  # DjangoのPermissionモデルに関連付け
+
+                permissions = form.cleaned_data.get('permissions', [])
+                if permissions:  # Formにpermissionsフィールドがある場合のみ処理
+                    user.user_permissions.clear() # これでDjangoのPermissionモデルとの関連もクリアされる
+                    for perm in permissions:
+                        user.user_permissions.add(perm.permission)  # DjangoのPermissionモデルに関連付け
                 return redirect('user:user_detail', pk=pk)
             messages.error(request, "ユーザーの更新に失敗しました。入力内容を確認してください。")
         return redirect('user:user_detail', pk=pk)
@@ -382,11 +385,12 @@ def tenant_user_update_create_view(request, pk=None):
         if form.is_valid():
             new_user = form.save(commit=False)
             new_user.tenant = request.user.tenant  # 作成するユーザーのテナントをログインユーザーと同じにする
-            new_user.set_password(form.cleaned_data['password1'])  # パスワードをハッシュ化して保存
             new_user.save()
             new_user.user_permissions.clear() # これでDjangoのPermissionモデルとの関連もクリアされる
-            for perm in form.cleaned_data.get('permissions', []):
-                new_user.user_permissions.add(perm.permission)  # DjangoのPermissionモデルに関連付け
+            permissions = form.cleaned_data.get('permissions', [])
+            if permissions:  # Formにpermissionsフィールドがある場合のみ処理
+                for perm in permissions:
+                    new_user.user_permissions.add(perm.permission)  # DjangoのPermissionモデルに関連付け
             return redirect('user:user_list')
         messages.error(request, "ユーザーの追加に失敗しました。入力内容を確認してください。")
         return redirect('user:user_list')
@@ -473,6 +477,9 @@ class LeaveApplicationCreateView(LoginRequiredMixin, OrchestraPermissionRequired
     form_class = LeaveApplicationForm
     template_name = "user/leave_application_form.html"
     success_url = reverse_lazy("user:leave_application_list")
+    permission_required = "user.add_leaveapplication"
+    permission_redirect_url_name = "index"
+    permission_denied_message = "休団申請の追加権限がありません。"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -516,6 +523,9 @@ class LeaveApplicationUpdateView(LoginRequiredMixin, OrchestraPermissionRequired
     form_class = LeaveApplicationUpdateForm
     template_name = "user/leave_application_form.html"
     success_url = reverse_lazy("user:leave_application_list")
+    permission_required = "user.change_leaveapplication"
+    permission_redirect_url_name = "index"
+    permission_denied_message = "休団申請の変更権限がありません。"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -564,12 +574,17 @@ class LeaveApplicationListView(LoginRequiredMixin, OrchestraPermissionRequiredMi
         context['add_url'] = reverse("user:leave_application_create")
         context['list_display_fields'] = self.list_display_fields
         context['detail_url_field'] = self.detail_url_field
+        context['add_permission'] = self.request.user.has_perm("user.add_leaveapplication") or self.request.user.is_admin()
         return context
 
 
 # 休団申請の詳細ビュー
 class LeaveApplicationDetailView(LoginRequiredMixin, OrchestraPermissionRequiredMixin, TemplateView):
     template_name = "user/leave_application_detail.html"
+
+    permission_required = "user.view_leaveapplication"
+    permission_redirect_url_name = "index"
+    permission_denied_message = "休団申請の閲覧権限がありません。"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -583,6 +598,10 @@ class LeaveApplicationDeleteView(LoginRequiredMixin, OrchestraPermissionRequired
     model = LeaveApplication
     template_name = "user/leave_application_delete.html"
     success_url = reverse_lazy("user:leave_application_list")
+
+    permission_required = "user.delete_leaveapplication"
+    permission_redirect_url_name = "index"
+    permission_denied_message = "休団申請の削除権限がありません。"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

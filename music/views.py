@@ -60,6 +60,7 @@ class MusicListView(OrchestraPermissionRequiredMixin, FilterView):
         context['add_url'] = reverse("music:music_create")
         context['list_display_fields'] = self.list_display_fields
         context['detail_url_field'] = self.detail_url_field
+        context['add_permission'] = self.request.user.has_perm("music.add_music") or self.request.user.is_admin()
         return context
 
 
@@ -174,7 +175,8 @@ class FormationCreateView(OrchestraPermissionRequiredMixin, generic_view.CreateV
     model = Formation
     form_class = FormationForm
     template_name = "music/formation_create.html"
-
+    # 成功した時のURL
+    success_url = reverse_lazy('music:music_list')
     permission_required = "music.add_formation"
     permission_redirect_url_name = "music:music_detail"
     permission_denied_message = "編成の追加権限がありません。"
@@ -189,7 +191,7 @@ class FormationCreateView(OrchestraPermissionRequiredMixin, generic_view.CreateV
 
     # 投稿に成功した時に実行される処理
     def get_success_url(self):
-        messages.success(self.request, '曲の追加に成功ました。')
+        messages.success(self.request, '編成の追加に成功ました。')
         return reverse_lazy('music:music_detail', kwargs={'pk': self.kwargs.get('pk')})
 
     def get_context_data(self, **kwargs):
@@ -220,7 +222,7 @@ class FormationUpdateView(OrchestraPermissionRequiredMixin, generic_view.UpdateV
 
     # 投稿に成功した時に実行される処理
     def get_success_url(self):
-        messages.success(self.request, '曲の追加に成功ました。')
+        messages.success(self.request, '編成の変更に成功ました。')
         return reverse_lazy('music:music_detail', kwargs={'pk': self.kwargs.get('pk')})
 
     def get_context_data(self, **kwargs):
