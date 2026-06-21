@@ -106,7 +106,8 @@ DEFAULT_PERMISSION_PRESETS = [
             'add_instrumentpart', 'change_instrumentpart', 'delete_instrumentpart', 'view_instrumentpart',
             'add_attendance', 'change_attendance', 'delete_attendance', 'view_attendance',
             'add_schedule', 'change_schedule', 'delete_schedule', 'view_schedule',
-            'add_schedulelog', 'change_schedulelog', 'delete_schedulelog', 'view_schedulelog'
+            'add_schedulelog', 'change_schedulelog', 'delete_schedulelog', 'view_schedulelog',
+            'add_leaveapplication', 'change_leaveapplication', 'delete_leaveapplication', 'view_leaveapplication'
         ] if p in NON_PRIVATE_PERMISSIONS
     ]},
     {"name": "一般ユーザー", "permissions": [
@@ -119,7 +120,8 @@ DEFAULT_PERMISSION_PRESETS = [
             'view_instrumentpart',
             'add_attendance', 'change_attendance', 'delete_attendance', 'view_attendance',
             'view_schedule',
-            'view_schedulelog'
+            'view_schedulelog',
+            'view_leaveapplication'
         ] if p in NON_PRIVATE_PERMISSIONS
     ]},
     {"name": "ゲスト", "permissions": [

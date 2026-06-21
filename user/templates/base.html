@@ -94,7 +94,7 @@
           {% if perms.schedule.view_schedule or user.is_admin %}
           <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'schedule:schedule_list' %}" role="button"><i class="app-button fa-solid fa-calendar"></i><span>活動</span></a></button></div>
           {% endif %}
-          {% if perms.user.view_schedule_log or user.is_admin %}
+          {% if perms.schedule.view_schedulelog or user.is_admin %}
           <div class="col-6 menu-card"><button type="button" class="btn"><a href="{% url 'schedule:schedule_log_list' %}" role="button"><i class="app-button fa-solid fa-clock-rotate-left"></i><span>活動履歴</span></a></button></div>
           {% endif %}
           {% comment %}

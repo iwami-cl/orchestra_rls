@@ -14,7 +14,7 @@
             </button>
             {% endif %}
             {% if add_url %}
-                {% if add_permission or user.is_admin %}
+                {% if add_permission %}
                 <a href="{{ add_url }}" class="btn add-btn" title="{{ model }}を追加">
                     <span class="fa fa-plus"></span>
                 </a>

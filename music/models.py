@@ -36,6 +36,9 @@ class Formation(models.Model):
 
     def get_users(self):
         return "\n".join([str(u) for u in self.users.all()])
+    
+    def __str__(self):
+        return f"{self.music.title} - {self.instrument.name} ({self.section})"
 
     class Meta:
         db_table = 'tenant_formation'

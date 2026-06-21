@@ -79,7 +79,7 @@
         </div>
     </div>
     {% endif %}
-    {% if perms.user.add_user or request.user.is_admin %}
+    {% if perms.user.add_tenantuser or request.user.is_admin %}
     <!-- 追加モーダル -->
     <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
