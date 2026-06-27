@@ -122,6 +122,8 @@ class AttendanceForScheduleSerializer(serializers.Serializer):
             if (str(user.user_id) in leave_users) and (status in [0, 4, 5]):
                 status = 4  # 欠席
                 note = "休団中"
+            if user.instrument is None:
+                continue  # 楽器が割り当てられていないユーザーはスキップ
             instrument_id = str(user.instrument.id)
             attendance_for_part[instrument_id]['attend'][status] += 1
             attendance_for_part[instrument_id]["users"].append({

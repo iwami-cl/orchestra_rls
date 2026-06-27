@@ -199,6 +199,8 @@ class AttendanceCheckView(OrchestraPermissionRequiredMixin, generic_view.Templat
             attendance_note=Subquery(attendance.values("note")[:1]),
         ).order_by('instrument__order', 'instrument__jp_name', 'username')
         context = self.get_context_data()
+
+        users = users.filter(role__in=['admin', 'member'])  # 管理者とメンバーのみ表示する
         
         context.update({
             "schedule": schedule,

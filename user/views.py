@@ -243,7 +243,7 @@ class TenantUserListView(OrchestraPermissionRequiredMixin, FilterView):
     permission_redirect_url_name = "index"
     permission_denied_message = "団員の閲覧権限がありません。"
 
-    list_display_fields = ["instrument"]
+    list_display_fields = ["instrument", "role", "last_login"]
     detail_url_field = None
 
     paginate_by = 10
